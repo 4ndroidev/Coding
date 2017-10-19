@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:attr/selectableItemBackground">
+
+    <ImageView
+        android:id="@+id/coding_author"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="18dp"
+        android:src="@drawable/coding_icon_default_user" />
+
+    <LinearLayout
+        android:id="@+id/coding_dynamic_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="18dp"
+        android:layout_toRightOf="@id/coding_author"
+        android:orientation="vertical"
+        android:paddingRight="15dp">
+
+        <TextView
+            android:id="@+id/coding_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:ellipsize="end"
+            android:maxLines="4"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/coding_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="3dp"
+            android:textColor="?android:attr/textColorSecondary"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/coding_divider_right"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/coding_dynamic_layout"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="10dp"
+        android:layout_toRightOf="@id/coding_author"
+        android:background="?android:attr/listDivider" />
+
+    <View
+        android:id="@+id/coding_divider_top"
+        android:layout_width="1dp"
+        android:layout_height="28dp"
+        android:layout_toRightOf="@id/coding_author"
+        android:background="?android:attr/listDivider" />
+
+    <View
+        android:id="@+id/coding_timeline_point"
+        android:layout_width="13dp"
+        android:layout_height="13dp"
+        android:layout_alignLeft="@id/coding_divider_top"
+        android:layout_below="@id/coding_divider_top"
+        android:layout_marginLeft="-6.5dp"
+        android:background="@drawable/coding_icon_timeline_point" />
+
+    <View
+        android:id="@+id/coding_divider_bottom"
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:layout_alignBottom="@id/coding_divider_right"
+        android:layout_alignLeft="@id/coding_divider_top"
+        android:layout_below="@id/coding_timeline_point"
+        android:background="?android:attr/listDivider" />
+
+</RelativeLayout>

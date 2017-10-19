@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackground"
+    android:clickable="true"
+    android:divider="?android:attr/listDivider"
+    android:dividerPadding="15dp"
+    android:orientation="vertical"
+    android:showDividers="middle|end">
+
+    <com.androidev.coding.widget.MenuItem
+        android:id="@+id/coding_commit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        app:icon="@drawable/coding_icon_dynamic"
+        app:name="@string/coding_commit" />
+
+    <com.androidev.coding.widget.MenuItem
+        android:id="@+id/coding_code"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        app:icon="@drawable/coding_icon_code"
+        app:name="@string/coding_code" />
+
+    <com.androidev.coding.widget.MenuItem
+        android:id="@+id/coding_download"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        app:icon="@drawable/coding_icon_download"
+        app:name="@string/coding_download" />
+
+    <com.androidev.coding.widget.MenuItem
+        android:id="@+id/coding_document"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        app:icon="@drawable/coding_icon_document"
+        app:name="@string/coding_document" />
+
+    <com.androidev.coding.widget.MenuItem
+        android:id="@+id/coding_readme"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        app:icon="@drawable/coding_icon_readme"
+        app:name="@string/coding_readme" />
+
+</LinearLayout>

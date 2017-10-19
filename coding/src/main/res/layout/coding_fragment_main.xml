@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ViewStub
+        android:id="@+id/coding_main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout="@layout/coding_layout_main" />
+
+    <LinearLayout
+        android:id="@+id/coding_empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorBackground"
+        android:clickable="true"
+        android:fitsSystemWindows="true"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/coding_icon_blank" />
+
+        <Button
+            android:id="@+id/coding_connect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:paddingBottom="8dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingTop="8dp"
+            android:text="@string/coding_connect_project"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <include layout="@layout/coding_layout_loading" />
+
+</FrameLayout>
