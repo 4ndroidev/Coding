@@ -3,12 +3,13 @@ package com.androidev.coding.network;
 import com.androidev.coding.model.Commit;
 import com.androidev.coding.model.Repo;
 
-import java.text.ParseException;
+import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 
 import io.reactivex.Observable;
 import retrofit2.Retrofit;
@@ -21,7 +22,11 @@ import retrofit2.http.QueryMap;
 public class GitHubService {
 
     private final static String BASE_URL = "https://api.github.com";
-    private final static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.CHINA);
+    private final static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
+
+    static {
+        DATE_FORMAT.setTimeZone(TimeZone.getTimeZone("UTC"));
+    }
 
     private final static class GitHubServiceHolder {
         private final static GitHubService instance = new GitHubService();
@@ -43,12 +48,7 @@ public class GitHubService {
     }
 
     public static Date time2date(String timestamp) {
-        try {
-            return DATE_FORMAT.parse(timestamp);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return new Date();
+        return DATE_FORMAT.parse(timestamp, new ParsePosition(0));
     }
 
     public interface Service {

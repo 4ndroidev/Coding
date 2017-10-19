@@ -17,4 +17,10 @@
     <string name="coding_commit_message" formatted="false">%s : [%s] %s</string>
     <string name="coding_commit_list_title">Commit详情</string>
     <string name="coding_download_hint">确认下载最新源码？</string>
+    <string name="coding_commit_info_format" formatted="false">%s 于%s提交</string>
+    <string name="coding_second_format" formatted="false">%d秒前</string>
+    <string name="coding_minute_format" formatted="false">%d分钟前</string>
+    <string name="coding_hour_format" formatted="false">%d小时前</string>
+    <string name="coding_day_format" formatted="false">%d天前</string>
+    <string name="coding_date_format" formatted="false">yyyy/MM/dd</string>
 </resources>
