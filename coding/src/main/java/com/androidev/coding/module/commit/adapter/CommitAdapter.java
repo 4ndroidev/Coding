@@ -169,7 +169,8 @@ public class CommitAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             boolean isLast = !hasMore && getItemCount() - 1 == position;
             dividerTop.setVisibility(isFirst ? View.INVISIBLE : View.VISIBLE);
             dividerBottom.setVisibility(isLast ? View.INVISIBLE : View.VISIBLE);
-            Glide.with(context).load(commit.author.avatar_url).transform(new CircleTransform(context)).into(icon);
+            Glide.with(context).load(commit.author.avatar_url).placeholder(R.drawable.coding_icon_default_author)
+                    .transform(new CircleTransform(context)).into(icon);
             messsage.setText(Html.fromHtml(commit.commit.message));
             String author = commit.author.login;
             String timestamp = getTimeStamp(commit.commit.committer.date);
