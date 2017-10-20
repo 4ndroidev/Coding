@@ -9,9 +9,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.androidev.coding.R;
-import com.androidev.coding.module.base.BaseActivity;
 import com.androidev.coding.model.Tree;
+import com.androidev.coding.module.base.BaseActivity;
 import com.androidev.coding.module.code.CodeActivity;
+import com.androidev.coding.module.image.ImageActivity;
 import com.androidev.coding.module.tree.adapter.TreeAdapter;
 import com.androidev.coding.widget.SwipeBackLayout;
 import com.androidev.refreshlayout.RefreshLayout;
@@ -41,7 +42,11 @@ public class TreeActivity extends BaseActivity {
                 intent.setClass(this, TreeActivity.class);
                 startActivity(intent);
             } else if (BLOB.equals(data.type)) {
-                intent.setClass(this, CodeActivity.class);
+                if (isImage(data.path)) {
+                    intent.setClass(this, ImageActivity.class);
+                } else {
+                    intent.setClass(this, CodeActivity.class);
+                }
                 startActivity(intent);
             }
         });
@@ -62,6 +67,14 @@ public class TreeActivity extends BaseActivity {
     void setError(Throwable throwable) {
         mRefreshLayout.setRefreshing(false);
         throwable.printStackTrace();
+    }
+
+    private boolean isImage(String name) {
+        return name.endsWith(".png") ||
+                name.endsWith(".jpg") ||
+                name.endsWith(".webp") ||
+                name.endsWith(".gif") ||
+                name.endsWith(".svg");
     }
 
 }

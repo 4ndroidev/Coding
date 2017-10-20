@@ -74,4 +74,9 @@ public class GitHub {
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE);
         downloadManager.enqueue(request);
     }
+
+    public String url4image(String owner, String repo, String sha) {
+        String format = BASE_URL + "/repos/%s/%s/git/blobs/%s";
+        return String.format(format, owner, repo, sha);
+    }
 }

@@ -24,6 +24,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/CodeTheme" />
 
+        <activity
+            android:name=".module.image.ImageActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/ImageTheme" />
+
     </application>
 
 </manifest>

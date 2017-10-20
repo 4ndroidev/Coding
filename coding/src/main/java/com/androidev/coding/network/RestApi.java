@@ -17,6 +17,9 @@ import retrofit2.http.Headers;
 import retrofit2.http.Path;
 import retrofit2.http.QueryMap;
 
+import static com.androidev.coding.misc.Constant.HEADER_ACCEPT;
+import static com.androidev.coding.misc.Constant.MEDIA_TYPE_RAW;
+
 public interface RestApi {
 
     String REPO_FORMAT = "repos/{owner}/{repo}";
@@ -37,6 +40,6 @@ public interface RestApi {
     Observable<Blob> blob(@Path("owner") String owner, @Path("repo") String repo, @Path("sha") String sha);
 
     @GET(REPO_FORMAT + "/git/blobs/{sha}")
-    @Headers({"Accept: application/vnd.github.v3.raw"})
+    @Headers({HEADER_ACCEPT + ": " + MEDIA_TYPE_RAW})
     Observable<ResponseBody> raw(@Path("owner") String owner, @Path("repo") String repo, @Path("sha") String sha);
 }
