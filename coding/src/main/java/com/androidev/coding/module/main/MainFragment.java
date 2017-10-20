@@ -111,7 +111,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         stopAnimation();
     }
 
-    void setEmpty(Throwable throwable) {
+    void setError(Throwable throwable) {
         mEmptyView.setVisibility(View.VISIBLE);
         stopAnimation();
         throwable.printStackTrace();

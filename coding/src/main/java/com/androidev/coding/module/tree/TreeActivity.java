@@ -59,4 +59,9 @@ public class TreeActivity extends AppCompatActivity {
         mAdapter.setData(data.tree);
     }
 
+    void setError(Throwable throwable) {
+        mRefreshLayout.setRefreshing(false);
+        throwable.printStackTrace();
+    }
+
 }

@@ -42,7 +42,7 @@ class CodePresenter {
         Observable.zip(readTemplate(), GitHub.getApi().blob(mOwner, mRepo, mSha), this::applyTemplate)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(mView::loadHtml, Throwable::printStackTrace);
+                .subscribe(mView::setData, mView::setError);
 
     }
 

@@ -76,9 +76,14 @@ public class CodeActivity extends AppCompatActivity {
         findViewById(R.id.coding_loading).setVisibility(View.GONE);
     }
 
-    public void loadHtml(String html) {
+    void setError(Throwable throwable) {
         stopLoading();
-        mWebView.loadDataWithBaseURL(GitHub.BASE_URL, html, "text/html", "UTF-8", null);
+        throwable.printStackTrace();
+    }
+
+    void setData(String data) {
+        stopLoading();
+        mWebView.loadDataWithBaseURL(GitHub.BASE_URL, data, "text/html", "UTF-8", null);
     }
 
 }

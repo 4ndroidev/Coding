@@ -29,7 +29,7 @@ class MainPresenter {
         GitHub.getApi().repo(mOwner, mRepo)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(mView::setData, mView::setEmpty);
+                .subscribe(mView::setData, mView::setError);
     }
 
 }

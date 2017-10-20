@@ -48,7 +48,7 @@ class TreePresenter {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(data -> Collections.sort(data.tree, NODE_COMPARATOR))
-                .subscribe(mView::setData, Throwable::printStackTrace);
+                .subscribe(mView::setData, mView::setError);
     }
 
 }
