@@ -11,12 +11,14 @@ import android.support.v7.widget.RecyclerView;
 
 import com.androidev.coding.R;
 import com.androidev.coding.model.Tree;
+import com.androidev.coding.module.code.CodeActivity;
 import com.androidev.coding.module.tree.adapter.TreeAdapter;
 import com.androidev.coding.widget.SwipeBackLayout;
 import com.androidev.refreshlayout.RefreshLayout;
 
+import static com.androidev.coding.misc.Constant.BLOB;
+import static com.androidev.coding.misc.Constant.PATH;
 import static com.androidev.coding.misc.Constant.SHA;
-import static com.androidev.coding.misc.Constant.TITLE;
 import static com.androidev.coding.misc.Constant.TREE;
 
 public class TreeActivity extends AppCompatActivity {
@@ -34,9 +36,12 @@ public class TreeActivity extends AppCompatActivity {
         mAdapter.setOnItemClickListener((view, position, data) -> {
             Intent intent = getIntent();
             intent.putExtra(SHA, data.sha);
-            intent.putExtra(TITLE, data.path);
+            intent.putExtra(PATH, data.path);
             if (TREE.equals(data.type)) {
                 intent.setClass(this, TreeActivity.class);
+                startActivity(intent);
+            } else if (BLOB.equals(data.type)) {
+                intent.setClass(this, CodeActivity.class);
                 startActivity(intent);
             }
         });

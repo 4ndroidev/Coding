@@ -13,9 +13,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 import static com.androidev.coding.misc.Constant.OWNER;
+import static com.androidev.coding.misc.Constant.PATH;
 import static com.androidev.coding.misc.Constant.REPO;
 import static com.androidev.coding.misc.Constant.SHA;
-import static com.androidev.coding.misc.Constant.TITLE;
 
 class TreePresenter {
 
@@ -37,7 +37,7 @@ class TreePresenter {
         mOwner = intent.getStringExtra(OWNER);
         mRepo = intent.getStringExtra(REPO);
         mSha = intent.getStringExtra(SHA);
-        String title = intent.getStringExtra(TITLE);
+        String title = intent.getStringExtra(PATH);
         if (!TextUtils.isEmpty(title)) {
             mView.setTitle(title);
         }

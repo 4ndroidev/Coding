@@ -1,6 +1,7 @@
 package com.androidev.coding.network;
 
 
+import com.androidev.coding.model.Blob;
 import com.androidev.coding.model.Branch;
 import com.androidev.coding.model.Commit;
 import com.androidev.coding.model.Repo;
@@ -29,4 +30,7 @@ public interface RestApi {
 
     @GET(REPO_FORMAT + "/git/trees/{sha}")
     Observable<Tree> tree(@Path("owner") String owner, @Path("repo") String repo, @Path("sha") String sha);
+
+    @GET(REPO_FORMAT + "/git/blobs/{sha}")
+    Observable<Blob> blob(@Path("owner") String owner, @Path("repo") String repo, @Path("sha") String sha);
 }

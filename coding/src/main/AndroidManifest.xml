@@ -18,6 +18,11 @@
             android:name=".module.tree.TreeActivity"
             android:theme="@style/SwipeBackTheme" />
 
+        <activity
+            android:name=".module.code.CodeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/CodeTheme" />
+
     </application>
 
 </manifest>

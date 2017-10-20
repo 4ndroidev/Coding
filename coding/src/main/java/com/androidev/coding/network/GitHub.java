@@ -12,7 +12,8 @@ import retrofit2.converter.jackson.JacksonConverterFactory;
 
 public class GitHub {
 
-    private final static String BASE_URL = "https://api.github.com";
+    public final static String BASE_URL = "https://api.github.com";
+
     private final static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
 
     static {
