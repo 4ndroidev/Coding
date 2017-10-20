@@ -19,6 +19,7 @@ import com.androidev.coding.misc.RoundTransform;
 import com.androidev.coding.model.Repo;
 import com.androidev.coding.module.commit.CommitActivity;
 import com.androidev.coding.module.tree.TreeActivity;
+import com.androidev.coding.network.GitHub;
 import com.bumptech.glide.Glide;
 
 import static com.androidev.coding.misc.Constant.BRANCH;
@@ -122,6 +123,8 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         int id = v.getId();
         if (R.id.coding_connect == id || R.id.project_icon == id) {
             mPresenter.load();
+        } else if (R.id.coding_download == id) {
+            GitHub.getInstance().download(getActivity(), mOwner, mRepo, mBranch);
         } else if (R.id.coding_commit == id) {
             Intent intent = new Intent();
             intent.putExtra(OWNER, mOwner);

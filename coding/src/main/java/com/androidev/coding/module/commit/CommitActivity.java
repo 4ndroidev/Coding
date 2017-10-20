@@ -6,7 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.androidev.coding.R;
-import com.androidev.coding.base.BaseActivity;
+import com.androidev.coding.module.base.BaseActivity;
 import com.androidev.coding.model.Commit;
 import com.androidev.coding.module.commit.adapter.CommitAdapter;
 import com.androidev.coding.widget.SwipeBackLayout;

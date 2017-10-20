@@ -9,7 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.androidev.coding.R;
-import com.androidev.coding.base.BaseActivity;
+import com.androidev.coding.module.base.BaseActivity;
 import com.androidev.coding.model.Tree;
 import com.androidev.coding.module.code.CodeActivity;
 import com.androidev.coding.module.tree.adapter.TreeAdapter;

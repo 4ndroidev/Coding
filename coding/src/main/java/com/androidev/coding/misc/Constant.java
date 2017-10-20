@@ -11,6 +11,7 @@ public class Constant {
     public final static String DEFAULT_BRANCH = "master";
     public final static String TITLE = "title";
     public final static String PATH = "path";
+    public final static String DOWNLOAD_DESTINATION = "Download";
 
     public final static int MINUTE = 60;
     public final static int HOUR = 60 * MINUTE;

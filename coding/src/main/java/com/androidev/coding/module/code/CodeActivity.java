@@ -14,7 +14,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.androidev.coding.R;
-import com.androidev.coding.base.BaseActivity;
+import com.androidev.coding.module.base.BaseActivity;
 import com.androidev.coding.network.GitHub;
 
 public class CodeActivity extends BaseActivity {

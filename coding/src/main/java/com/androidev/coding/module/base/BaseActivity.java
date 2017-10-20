@@ -1,4 +1,4 @@
-package com.androidev.coding.base;
+package com.androidev.coding.module.base;
 
 
 import android.support.v7.app.AppCompatActivity;

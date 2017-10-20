@@ -1,5 +1,16 @@
 package com.androidev.coding.network;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.DownloadManager;
+import android.content.Context;
+import android.net.Uri;
+import android.os.Environment;
+import android.util.Log;
+
+import com.androidev.coding.R;
+
+import java.io.File;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -10,10 +21,14 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
+import static com.androidev.coding.misc.Constant.DOWNLOAD_DESTINATION;
+
 public class GitHub {
 
     public final static String BASE_URL = "https://api.github.com";
 
+    private final static String TAG = "GitHub";
+    private final static String DOWNLOAD_URL_FORMAT = "https://github.com/%s/%s/archive/%s.zip";
     private final static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
 
     static {
@@ -47,5 +62,28 @@ public class GitHub {
         return DATE_FORMAT.parse(timestamp, new ParsePosition(0));
     }
 
-
+    public void download(Activity activity, String owner, String repo, String branch) {
+        String name = repo + "-" + branch + ".zip";
+        File destination = new File(Environment.getExternalStoragePublicDirectory(DOWNLOAD_DESTINATION), name);
+        new AlertDialog.Builder(activity)
+                .setMessage(R.string.coding_download_hint)
+                .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                    dialog.dismiss();
+                    if (destination.exists() && !destination.delete()) {
+                        Log.e(TAG, "can not delete file: " + destination.getPath());
+                        return;
+                    }
+                    String url = String.format(Locale.US, DOWNLOAD_URL_FORMAT, owner, repo, branch);
+                    DownloadManager downloadManager = (DownloadManager) activity
+                            .getSystemService(Context.DOWNLOAD_SERVICE);
+                    DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+                    request.setTitle(destination.getName());
+                    request.setDestinationInExternalPublicDir(DOWNLOAD_DESTINATION, destination.getName());
+                    request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE);
+                    downloadManager.enqueue(request);
+                })
+                .setNegativeButton(android.R.string.cancel, (dialog, which) -> dialog.dismiss())
+                .create()
+                .show();
+    }
 }
