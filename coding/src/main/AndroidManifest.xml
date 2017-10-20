@@ -14,6 +14,10 @@
             android:label="@string/coding_commit"
             android:theme="@style/SwipeBackTheme" />
 
+        <activity
+            android:name=".module.tree.TreeActivity"
+            android:theme="@style/SwipeBackTheme" />
+
     </application>
 
 </manifest>

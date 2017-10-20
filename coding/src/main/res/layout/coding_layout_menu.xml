@@ -21,7 +21,7 @@
         app:name="@string/coding_commit" />
 
     <com.androidev.coding.widget.MenuItem
-        android:id="@+id/coding_code"
+        android:id="@+id/coding_tree"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?android:attr/selectableItemBackground"

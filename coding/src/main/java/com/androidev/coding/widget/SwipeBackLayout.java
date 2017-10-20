@@ -1,7 +1,6 @@
 package com.androidev.coding.widget;
 
 import android.app.Activity;
-import android.graphics.Color;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewGroupCompat;
 import android.support.v4.widget.ViewDragHelper;
@@ -52,9 +51,9 @@ public class SwipeBackLayout extends FrameLayout {
             super.onViewPositionChanged(changedView, left, top, dx, dy);
             mContentLeft = left;
             mContentTop = top;
-            float percent = 1f - ((float) left / mScreenWidth);
-            int alpha = (int) (180 * percent);
-            setBackgroundColor(Color.argb(alpha, 0, 0, 0));
+//            float percent = 1f - ((float) left / mScreenWidth);
+//            int alpha = (int) (180 * percent);
+//            setBackgroundColor(Color.argb(alpha, 0, 0, 0));
         }
 
         @Override

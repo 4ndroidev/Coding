@@ -18,18 +18,24 @@ import com.androidev.coding.R;
 import com.androidev.coding.misc.RoundTransform;
 import com.androidev.coding.model.Repo;
 import com.androidev.coding.module.commit.CommitActivity;
+import com.androidev.coding.module.tree.TreeActivity;
 import com.bumptech.glide.Glide;
 
+import static com.androidev.coding.misc.Constant.BRANCH;
 import static com.androidev.coding.misc.Constant.OWNER;
 import static com.androidev.coding.misc.Constant.REPO;
+import static com.androidev.coding.misc.Constant.SHA;
+import static com.androidev.coding.misc.Constant.TITLE;
 
 public class MainFragment extends Fragment implements View.OnClickListener {
 
+    private boolean isInflated;
     private View mEmptyView;
     private View mLoadingView;
     private View mLoadingAnim;
     private ViewGroup mContentView;
     private MainPresenter mPresenter;
+    private String mOwner, mRepo, mBranch;
 
     public static MainFragment newInstance(Bundle arguments) {
         MainFragment fragment = new MainFragment();
@@ -41,6 +47,10 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPresenter = new MainPresenter(this);
+        Bundle arguments = getArguments();
+        mOwner = arguments.getString(OWNER);
+        mRepo = arguments.getString(REPO);
+        mBranch = arguments.getString(BRANCH);
     }
 
     @Nullable
@@ -79,15 +89,16 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     }
 
     void setData(Repo repo) {
-        if (mContentView.getChildCount() == 3) {
-            mEmptyView.setVisibility(View.GONE);
+        if (!isInflated) {
+            isInflated = true;
             ((ViewStub) mContentView.findViewById(R.id.coding_main)).inflate();
             mContentView.findViewById(R.id.coding_commit).setOnClickListener(this);
-            mContentView.findViewById(R.id.coding_code).setOnClickListener(this);
+            mContentView.findViewById(R.id.coding_tree).setOnClickListener(this);
             mContentView.findViewById(R.id.coding_readme).setOnClickListener(this);
             mContentView.findViewById(R.id.coding_document).setOnClickListener(this);
             mContentView.findViewById(R.id.coding_download).setOnClickListener(this);
         }
+        mEmptyView.setVisibility(View.GONE);
         ImageView icon = (ImageView) mContentView.findViewById(R.id.project_icon);
         TextView name = (TextView) mContentView.findViewById(R.id.project_name);
         TextView owner = (TextView) mContentView.findViewById(R.id.project_owner);
@@ -112,11 +123,18 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         if (R.id.coding_connect == id || R.id.project_icon == id) {
             mPresenter.load();
         } else if (R.id.coding_commit == id) {
-            Bundle arguments = getArguments();
             Intent intent = new Intent();
-            intent.putExtra(OWNER, arguments.getString(OWNER));
-            intent.putExtra(REPO, arguments.getString(REPO));
+            intent.putExtra(OWNER, mOwner);
+            intent.putExtra(REPO, mRepo);
             intent.setClass(getContext(), CommitActivity.class);
+            startActivity(intent);
+        } else if (R.id.coding_tree == id) {
+            Intent intent = new Intent();
+            intent.putExtra(OWNER, mOwner);
+            intent.putExtra(REPO, mRepo);
+            intent.putExtra(SHA, mBranch);
+            intent.putExtra(TITLE, mBranch);
+            intent.setClass(getContext(), TreeActivity.class);
             startActivity(intent);
         }
     }

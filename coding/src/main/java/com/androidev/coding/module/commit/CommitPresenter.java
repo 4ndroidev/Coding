@@ -3,7 +3,7 @@ package com.androidev.coding.module.commit;
 import android.content.Intent;
 
 import com.androidev.coding.model.Commit;
-import com.androidev.coding.network.GitHubService;
+import com.androidev.coding.network.GitHub;
 
 import java.util.HashMap;
 import java.util.List;
@@ -33,7 +33,7 @@ class CommitPresenter {
         Map<String, Object> data = new HashMap<>();
         data.put("page", 1);
         data.put("per_page", 20);
-        GitHubService.get().commits(mOwner, mRepo, data)
+        GitHub.getApi().commits(mOwner, mRepo, data)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doAfterNext(commits -> {
@@ -51,7 +51,7 @@ class CommitPresenter {
         data.put("page", 1);
         data.put("per_page", 20);
         data.put("sha", mSha);
-        GitHubService.get().commits(mOwner, mRepo, data)
+        GitHub.getApi().commits(mOwner, mRepo, data)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doAfterNext(commits -> {
