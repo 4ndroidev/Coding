@@ -1,6 +1,5 @@
 package com.androidev.coding.misc;
 
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;

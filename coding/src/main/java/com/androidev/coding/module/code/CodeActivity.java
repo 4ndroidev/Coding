@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
@@ -15,9 +14,10 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.androidev.coding.R;
+import com.androidev.coding.base.BaseActivity;
 import com.androidev.coding.network.GitHub;
 
-public class CodeActivity extends AppCompatActivity {
+public class CodeActivity extends BaseActivity {
 
     private WebView mWebView;
 

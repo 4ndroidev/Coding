@@ -11,7 +11,9 @@ import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Observable;
+import okhttp3.ResponseBody;
 import retrofit2.http.GET;
+import retrofit2.http.Headers;
 import retrofit2.http.Path;
 import retrofit2.http.QueryMap;
 
@@ -33,4 +35,8 @@ public interface RestApi {
 
     @GET(REPO_FORMAT + "/git/blobs/{sha}")
     Observable<Blob> blob(@Path("owner") String owner, @Path("repo") String repo, @Path("sha") String sha);
+
+    @GET(REPO_FORMAT + "/git/blobs/{sha}")
+    @Headers({"Accept: application/vnd.github.v3.raw"})
+    Observable<ResponseBody> raw(@Path("owner") String owner, @Path("repo") String repo, @Path("sha") String sha);
 }

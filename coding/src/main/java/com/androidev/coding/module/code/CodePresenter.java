@@ -1,14 +1,15 @@
 package com.androidev.coding.module.code;
 
 import android.content.Intent;
-import android.util.Base64;
 
-import com.androidev.coding.model.Blob;
 import com.androidev.coding.network.GitHub;
+
+import java.io.IOException;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.ResponseBody;
 import okio.BufferedSource;
 import okio.Okio;
 
@@ -39,7 +40,7 @@ class CodePresenter {
 
     void load() {
         mView.startLoading();
-        Observable.zip(readTemplate(), GitHub.getApi().blob(mOwner, mRepo, mSha), this::applyTemplate)
+        Observable.zip(readTemplate(), GitHub.getApi().raw(mOwner, mRepo, mSha), this::applyTemplate)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(mView::setData, mView::setError);
@@ -57,8 +58,8 @@ class CodePresenter {
         });
     }
 
-    private String applyTemplate(String template, Blob blob) {
-        String content = new String(Base64.decode(blob.content, Base64.DEFAULT));
+    private String applyTemplate(String template, ResponseBody body) throws IOException {
+        String content = body.string();
         boolean isMarkdown = mPath.endsWith(".md");
         if (isMarkdown) {
             content = content.replace("\n", "\\n").replace("\"", "\\\"").replace("'", "\\'");

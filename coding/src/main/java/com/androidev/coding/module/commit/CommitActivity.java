@@ -2,11 +2,11 @@ package com.androidev.coding.module.commit;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.androidev.coding.R;
+import com.androidev.coding.base.BaseActivity;
 import com.androidev.coding.model.Commit;
 import com.androidev.coding.module.commit.adapter.CommitAdapter;
 import com.androidev.coding.widget.SwipeBackLayout;
@@ -14,7 +14,7 @@ import com.androidev.refreshlayout.RefreshLayout;
 
 import java.util.List;
 
-public class CommitActivity extends AppCompatActivity {
+public class CommitActivity extends BaseActivity {
 
     private RefreshLayout mRefreshLayout;
     private CommitAdapter mAdapter;
