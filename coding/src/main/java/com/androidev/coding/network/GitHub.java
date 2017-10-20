@@ -1,14 +1,10 @@
 package com.androidev.coding.network;
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.DownloadManager;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
-
-import com.androidev.coding.R;
 
 import java.io.File;
 import java.text.ParsePosition;
@@ -62,28 +58,20 @@ public class GitHub {
         return DATE_FORMAT.parse(timestamp, new ParsePosition(0));
     }
 
-    public void download(Activity activity, String owner, String repo, String branch) {
+    public void download(Context context, String owner, String repo, String branch) {
         String name = repo + "-" + branch + ".zip";
         File destination = new File(Environment.getExternalStoragePublicDirectory(DOWNLOAD_DESTINATION), name);
-        new AlertDialog.Builder(activity)
-                .setMessage(R.string.coding_download_hint)
-                .setPositiveButton(android.R.string.ok, (dialog, which) -> {
-                    dialog.dismiss();
-                    if (destination.exists() && !destination.delete()) {
-                        Log.e(TAG, "can not delete file: " + destination.getPath());
-                        return;
-                    }
-                    String url = String.format(Locale.US, DOWNLOAD_URL_FORMAT, owner, repo, branch);
-                    DownloadManager downloadManager = (DownloadManager) activity
-                            .getSystemService(Context.DOWNLOAD_SERVICE);
-                    DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
-                    request.setTitle(destination.getName());
-                    request.setDestinationInExternalPublicDir(DOWNLOAD_DESTINATION, destination.getName());
-                    request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE);
-                    downloadManager.enqueue(request);
-                })
-                .setNegativeButton(android.R.string.cancel, (dialog, which) -> dialog.dismiss())
-                .create()
-                .show();
+        if (destination.exists() && !destination.delete()) {
+            Log.e(TAG, "can not delete file: " + destination.getPath());
+            return;
+        }
+        String url = String.format(Locale.US, DOWNLOAD_URL_FORMAT, owner, repo, branch);
+        DownloadManager downloadManager = (DownloadManager) context
+                .getSystemService(Context.DOWNLOAD_SERVICE);
+        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+        request.setTitle(destination.getName());
+        request.setDestinationInExternalPublicDir(DOWNLOAD_DESTINATION, destination.getName());
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE);
+        downloadManager.enqueue(request);
     }
 }

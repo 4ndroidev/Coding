@@ -1,5 +1,7 @@
 package com.androidev.coding.module.main;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -17,12 +19,14 @@ import android.widget.TextView;
 import com.androidev.coding.R;
 import com.androidev.coding.misc.RoundTransform;
 import com.androidev.coding.model.Repo;
+import com.androidev.coding.module.code.CodeActivity;
 import com.androidev.coding.module.commit.CommitActivity;
 import com.androidev.coding.module.tree.TreeActivity;
 import com.androidev.coding.network.GitHub;
 import com.bumptech.glide.Glide;
 
 import static com.androidev.coding.misc.Constant.BRANCH;
+import static com.androidev.coding.misc.Constant.IS_README;
 import static com.androidev.coding.misc.Constant.OWNER;
 import static com.androidev.coding.misc.Constant.REPO;
 import static com.androidev.coding.misc.Constant.SHA;
@@ -118,13 +122,26 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         throwable.printStackTrace();
     }
 
+    private void download() {
+        Activity activity = getActivity();
+        new AlertDialog.Builder(activity)
+                .setMessage(R.string.coding_download_hint)
+                .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                    dialog.dismiss();
+                    GitHub.getInstance().download(activity, mOwner, mRepo, mBranch);
+                })
+                .setNegativeButton(android.R.string.cancel, (dialog, which) -> dialog.dismiss())
+                .create()
+                .show();
+    }
+
     @Override
     public void onClick(View v) {
         int id = v.getId();
         if (R.id.coding_connect == id || R.id.project_icon == id) {
             mPresenter.load();
         } else if (R.id.coding_download == id) {
-            GitHub.getInstance().download(getActivity(), mOwner, mRepo, mBranch);
+            download();
         } else if (R.id.coding_commit == id) {
             Intent intent = new Intent();
             intent.putExtra(OWNER, mOwner);
@@ -138,6 +155,14 @@ public class MainFragment extends Fragment implements View.OnClickListener {
             intent.putExtra(SHA, mBranch);
             intent.putExtra(TITLE, mBranch);
             intent.setClass(getContext(), TreeActivity.class);
+            startActivity(intent);
+        } else if (R.id.coding_readme == id) {
+            Intent intent = new Intent();
+            intent.putExtra(OWNER, mOwner);
+            intent.putExtra(REPO, mRepo);
+            intent.putExtra(SHA, mBranch);
+            intent.putExtra(IS_README, true);
+            intent.setClass(getContext(), CodeActivity.class);
             startActivity(intent);
         }
     }
