@@ -43,8 +43,8 @@ public class MenuItem extends LinearLayout {
         String name = array.getString(array.getIndex(R.styleable.CodingMenuItem_name));
         array.recycle();
         LayoutInflater.from(context).inflate(R.layout.coding_layout_menu_item, this, true);
-        this.icon = (ImageView) findViewById(R.id.menu_icon);
-        this.name = (TextView) findViewById(R.id.menu_name);
+        this.icon = (ImageView) findViewById(R.id.coding_icon);
+        this.name = (TextView) findViewById(R.id.coding_name);
         this.icon.setImageDrawable(icon);
         this.name.setText(name);
     }

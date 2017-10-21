@@ -39,7 +39,7 @@ public class ImageActivity extends Activity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         SwipeBackLayout.attachTo(this);
         setContentView(R.layout.coding_activity_image);
-        image = (ImageView) findViewById(R.id.image);
+        image = (ImageView) findViewById(R.id.coding_image);
         loadImage();
     }
 

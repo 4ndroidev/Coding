@@ -30,12 +30,17 @@ public interface RestApi {
     @GET(REPO_FORMAT + "/commits")
     Observable<List<Commit>> commits(@Path("owner") String owner, @Path("repo") String repo, @QueryMap Map<String, Object> data);
 
+    @GET(REPO_FORMAT + "/commits/{sha}")
+    Observable<Commit> commit(@Path("owner") String owner, @Path("repo") String repo, @Path("sha") String sha);
+
+    // 暂时用不到
     @GET(REPO_FORMAT + "/branches/{branch}")
     Observable<Branch> branch(@Path("owner") String owner, @Path("repo") String repo, @Path("branch") String branch);
 
     @GET(REPO_FORMAT + "/git/trees/{sha}")
     Observable<Tree> tree(@Path("owner") String owner, @Path("repo") String repo, @Path("sha") String sha);
 
+    // 暂时用不到
     @GET(REPO_FORMAT + "/git/blobs/{sha}")
     Observable<Blob> blob(@Path("owner") String owner, @Path("repo") String repo, @Path("sha") String sha);
 

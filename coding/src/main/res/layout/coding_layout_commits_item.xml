@@ -5,7 +5,7 @@
     android:background="?android:attr/selectableItemBackground">
 
     <ImageView
-        android:id="@+id/coding_author"
+        android:id="@+id/coding_icon"
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_marginLeft="15dp"
@@ -13,11 +13,11 @@
         android:layout_marginTop="18dp" />
 
     <LinearLayout
-        android:id="@+id/coding_dynamic_layout"
+        android:id="@+id/coding_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="18dp"
-        android:layout_toRightOf="@id/coding_author"
+        android:layout_toRightOf="@id/coding_icon"
         android:orientation="vertical">
 
         <TextView
@@ -47,17 +47,17 @@
         android:id="@+id/coding_divider_right"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_below="@id/coding_dynamic_layout"
+        android:layout_below="@id/coding_layout"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="10dp"
-        android:layout_toRightOf="@id/coding_author"
+        android:layout_toRightOf="@id/coding_icon"
         android:background="?android:attr/listDivider" />
 
     <View
         android:id="@+id/coding_divider_top"
         android:layout_width="1dp"
         android:layout_height="28dp"
-        android:layout_toRightOf="@id/coding_author"
+        android:layout_toRightOf="@id/coding_icon"
         android:background="?android:attr/listDivider" />
 
     <View

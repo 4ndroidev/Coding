@@ -1,4 +1,4 @@
-package com.androidev.coding.module.tree;
+package com.androidev.coding.module.code;
 
 
 import android.content.Intent;
@@ -11,9 +11,8 @@ import android.support.v7.widget.RecyclerView;
 import com.androidev.coding.R;
 import com.androidev.coding.model.Tree;
 import com.androidev.coding.module.base.BaseActivity;
-import com.androidev.coding.module.code.CodeActivity;
 import com.androidev.coding.module.image.ImageActivity;
-import com.androidev.coding.module.tree.adapter.TreeAdapter;
+import com.androidev.coding.module.code.adapter.TreeAdapter;
 import com.androidev.coding.widget.SwipeBackLayout;
 import com.androidev.refreshlayout.RefreshLayout;
 
@@ -50,9 +49,9 @@ public class TreeActivity extends BaseActivity {
                 startActivity(intent);
             }
         });
-        mRefreshLayout = (RefreshLayout) findViewById(R.id.refresh_layout);
+        mRefreshLayout = (RefreshLayout) findViewById(R.id.coding_refresh_layout);
         mRefreshLayout.setOnRefreshListener(presenter::refresh);
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.coding_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
         recyclerView.setAdapter(mAdapter);

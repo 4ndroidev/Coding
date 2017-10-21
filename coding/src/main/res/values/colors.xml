@@ -6,4 +6,7 @@
     <color name="colorAccent">@color/colorPrimary</color>
     <color name="colorTintDark">@android:color/white</color>
     <color name="colorTintLight">@color/colorPrimary</color>
+    <color name="colorAddition">#ff98c685</color>
+    <color name="colorDeletion">#ffdf7d78</color>
+    <color name="colorChange">#ff45c0ee</color>
 </resources>

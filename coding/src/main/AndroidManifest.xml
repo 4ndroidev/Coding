@@ -11,12 +11,16 @@
         android:supportsRtl="true">
 
         <activity
-            android:name=".module.commit.CommitActivity"
+            android:name=".module.commit.CommitsActivity"
             android:label="@string/coding_commit"
             android:theme="@style/SwipeBackTheme" />
 
         <activity
-            android:name=".module.tree.TreeActivity"
+            android:name=".module.commit.CommitActivity"
+            android:theme="@style/SwipeBackTheme" />
+
+        <activity
+            android:name=".module.code.TreeActivity"
             android:theme="@style/SwipeBackTheme" />
 
         <activity

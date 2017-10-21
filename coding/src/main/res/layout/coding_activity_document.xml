@@ -4,11 +4,11 @@
     android:layout_height="match_parent"
     android:background="@color/colorBackground">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view"
+    <WebView
+        android:id="@+id/coding_markdown_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:overScrollMode="never" />
+        android:layout_height="match_parent" />
 
     <include layout="@layout/coding_layout_loading" />
+
 </FrameLayout>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="8dp"
+    android:paddingLeft="15dp"
+    android:paddingRight="15dp"
+    android:paddingTop="15dp">
+
+    <ImageView
+        android:id="@+id/coding_icon"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginRight="20dp"
+        android:src="@drawable/coding_icon_default_author" />
+
+    <TextView
+        android:id="@+id/coding_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="@id/coding_icon"
+        android:layout_toRightOf="@id/coding_icon"
+        android:maxLines="1"
+        android:textColor="?android:textColorPrimary"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/coding_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/coding_icon"
+        android:layout_alignLeft="@id/coding_name"
+        android:maxLines="1"
+        android:textColor="?android:textColorSecondary"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/coding_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/coding_icon"
+        android:layout_below="@id/coding_icon"
+        android:autoLink="email|web"
+        android:lineSpacingMultiplier="1.1"
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp"
+        android:textSize="12sp" />
+
+    <View
+        android:id="@+id/coding_divider"
+        android:layout_width="match_parent"
+        android:layout_height="2px"
+        android:layout_below="@id/coding_message"
+        android:background="@drawable/coding_dash_line"
+        android:layerType="software" />
+
+    <TextView
+        android:id="@+id/coding_change"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/coding_divider"
+        android:paddingTop="8dp"
+        android:textColor="?android:textColorSecondary"
+        android:textSize="13sp" />
+
+</RelativeLayout>

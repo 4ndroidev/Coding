@@ -2,15 +2,17 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android">
 
     <ImageView
-        android:id="@+id/menu_icon"
+        android:id="@+id/coding_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="20dp"
-        android:tint="?android:attr/textColorPrimary"
-        android:tintMode="src_in" />
+        android:tint="?android:attr/textColorPrimary" />
+
+    <android.support.v4.widget.Space
+        android:layout_width="20dp"
+        android:layout_height="wrap_content" />
 
     <TextView
-        android:id="@+id/menu_name"
+        android:id="@+id/coding_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="?android:attr/textColorPrimary" />

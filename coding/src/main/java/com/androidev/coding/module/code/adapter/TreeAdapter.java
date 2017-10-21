@@ -1,4 +1,4 @@
-package com.androidev.coding.module.tree.adapter;
+package com.androidev.coding.module.code.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -27,7 +27,7 @@ public class TreeAdapter extends RecyclerView.Adapter<TreeAdapter.NodeViewHolder
 
     @Override
     public NodeViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new NodeViewHolder(createItemView(R.layout.coding_layout_treeinfo_item, parent));
+        return new NodeViewHolder(createItemView(R.layout.coding_layout_tree_item, parent));
     }
 
     @Override
@@ -57,8 +57,8 @@ public class TreeAdapter extends RecyclerView.Adapter<TreeAdapter.NodeViewHolder
         private NodeViewHolder(View itemView) {
             super(itemView);
             context = itemView.getContext();
-            icon = (ImageView) itemView.findViewById(R.id.coding_tree_icon);
-            name = (TextView) itemView.findViewById(R.id.coding_tree_name);
+            icon = (ImageView) itemView.findViewById(R.id.coding_icon);
+            name = (TextView) itemView.findViewById(R.id.coding_name);
             itemView.setOnClickListener(v -> {
                 if (mOnItemClickListener != null) {
                     int position = getAdapterPosition();

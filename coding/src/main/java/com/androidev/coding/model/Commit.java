@@ -7,22 +7,24 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Commit {
 
-    public String url;
     public String sha;
+    public CommitInfo commit;
+    public String url;
     public String html_url;
     public String comments_url;
-    public CommitInfo commit;
     public AuthorX author;
     public CommitterX committer;
+    public Stats stats;
     public List<Parents> parents;
+    public List<File> files;
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class CommitInfo {
-        public String url;
         public Author author;
         public Committer committer;
         public String message;
         public Tree tree;
+        public String url;
         public int comment_count;
         public Verification verification;
 
@@ -42,8 +44,8 @@ public class Commit {
 
         @JsonIgnoreProperties(ignoreUnknown = true)
         public static class Tree {
-            public String url;
             public String sha;
+            public String url;
         }
 
         @JsonIgnoreProperties(ignoreUnknown = true)
@@ -98,8 +100,30 @@ public class Commit {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class Stats {
+        public int total;
+        public int additions;
+        public int deletions;
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Parents {
-        public String url;
         public String sha;
+        public String url;
+        public String html_url;
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class File {
+        public String sha;
+        public String filename;
+        public String status;
+        public int additions;
+        public int deletions;
+        public int changes;
+        public String blob_url;
+        public String raw_url;
+        public String contents_url;
+        public String patch;
     }
 }

@@ -20,8 +20,8 @@ import com.androidev.coding.R;
 import com.androidev.coding.misc.RoundTransform;
 import com.androidev.coding.model.Repo;
 import com.androidev.coding.module.code.CodeActivity;
-import com.androidev.coding.module.commit.CommitActivity;
-import com.androidev.coding.module.tree.TreeActivity;
+import com.androidev.coding.module.commit.CommitsActivity;
+import com.androidev.coding.module.code.TreeActivity;
 import com.androidev.coding.network.GitHub;
 import com.bumptech.glide.Glide;
 
@@ -104,14 +104,16 @@ public class MainFragment extends Fragment implements View.OnClickListener {
             mContentView.findViewById(R.id.coding_download).setOnClickListener(this);
         }
         mEmptyView.setVisibility(View.GONE);
-        ImageView icon = (ImageView) mContentView.findViewById(R.id.project_icon);
-        TextView name = (TextView) mContentView.findViewById(R.id.project_name);
-        TextView owner = (TextView) mContentView.findViewById(R.id.project_owner);
-        TextView description = (TextView) mContentView.findViewById(R.id.project_description);
+        ImageView icon = (ImageView) mContentView.findViewById(R.id.coding_icon);
+        TextView name = (TextView) mContentView.findViewById(R.id.coding_name);
+        TextView owner = (TextView) mContentView.findViewById(R.id.coding_owner);
+        TextView description = (TextView) mContentView.findViewById(R.id.coding_description);
+        TextView star = (TextView) mContentView.findViewById(R.id.coding_star);
         Glide.with(this).load(repo.owner.avatar_url).transform(new RoundTransform(getContext(), 20)).into(icon);
         name.setText(repo.name);
         owner.setText(repo.owner.login);
         description.setText(repo.description);
+        star.setText(String.valueOf(repo.stargazers_count));
         icon.setOnClickListener(this);
         stopAnimation();
     }
@@ -138,7 +140,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        if (R.id.coding_connect == id || R.id.project_icon == id) {
+        if (R.id.coding_connect == id || R.id.coding_icon == id) {
             mPresenter.load();
         } else if (R.id.coding_download == id) {
             download();
@@ -146,7 +148,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
             Intent intent = new Intent();
             intent.putExtra(OWNER, mOwner);
             intent.putExtra(REPO, mRepo);
-            intent.setClass(getContext(), CommitActivity.class);
+            intent.setClass(getContext(), CommitsActivity.class);
             startActivity(intent);
         } else if (R.id.coding_tree == id) {
             Intent intent = new Intent();

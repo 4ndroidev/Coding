@@ -11,6 +11,11 @@ public class Constant {
     public final static String DEFAULT_BRANCH = "master";
     public final static String TITLE = "title";
     public final static String PATH = "path";
+
+    public final static String MODIFIED = "modified";
+    public final static String ADDED = "added";
+    public final static String DELETED = "deleted";
+
     public final static String IS_README = "is_readme";
     public final static String README_MD_LOWERCASE = "readme.md";
     public final static String DOWNLOAD_DESTINATION = "Download";

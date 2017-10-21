@@ -2,67 +2,86 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_weight="1"
     android:background="@color/colorBackground"
     android:orientation="vertical">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
         android:clickable="true"
         android:fitsSystemWindows="true"
-        android:orientation="horizontal"
+        android:paddingBottom="10dp"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
         android:paddingTop="25dp">
 
         <ImageView
-            android:id="@+id/project_icon"
+            android:id="@+id/coding_icon"
             android:layout_width="60dp"
             android:layout_height="60dp" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <android.support.v4.widget.Space
+            android:id="@+id/coding_horizontal_space"
+            android:layout_width="15dp"
             android:layout_height="60dp"
-            android:gravity="center_vertical"
-            android:orientation="vertical"
-            android:paddingLeft="15dp">
+            android:layout_toRightOf="@id/coding_icon" />
 
-            <TextView
-                android:id="@+id/project_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:maxLines="1"
-                android:textColor="@android:color/white"
-                android:textSize="18sp" />
+        <TextView
+            android:id="@+id/coding_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/coding_icon"
+            android:layout_toRightOf="@id/coding_horizontal_space"
+            android:maxLines="1"
+            android:paddingTop="8dp"
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
 
-            <TextView
-                android:id="@+id/project_owner"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:lineSpacingMultiplier="1.2"
-                android:maxLines="2"
-                android:paddingTop="2dp"
-                android:textColor="#efefef"
-                android:textSize="15sp" />
-        </LinearLayout>
-    </LinearLayout>
+        <TextView
+            android:id="@+id/coding_owner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/coding_icon"
+            android:layout_alignLeft="@id/coding_name"
+            android:layout_below="@id/coding_name"
+            android:gravity="bottom"
+            android:maxLines="1"
+            android:paddingBottom="8dp"
+            android:textColor="#efefef"
+            android:textSize="15sp" />
 
-    <TextView
-        android:id="@+id/project_description"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
-        android:clickable="true"
-        android:gravity="center_vertical"
-        android:maxLines="2"
-        android:paddingBottom="10dp"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
-        android:paddingTop="10dp"
-        android:textColor="#efefef"
-        android:textSize="15sp" />
+        <android.support.v4.widget.Space
+            android:id="@+id/coding_vertical_space"
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:layout_below="@id/coding_icon" />
+
+        <TextView
+            android:id="@+id/coding_star"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/coding_vertical_space"
+            android:drawableLeft="@drawable/coding_icon_star"
+            android:drawablePadding="2dp"
+            android:gravity="center"
+            android:maxLines="1"
+            android:textColor="#efefef"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/coding_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/coding_vertical_space"
+            android:layout_toLeftOf="@id/coding_star"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="#efefef"
+            android:textSize="15sp" />
+
+    </RelativeLayout>
 
     <include layout="@layout/coding_layout_menu" />
 
