@@ -20,17 +20,18 @@ import com.androidev.coding.R;
 import com.androidev.coding.misc.RoundTransform;
 import com.androidev.coding.model.Repo;
 import com.androidev.coding.module.code.CodeActivity;
-import com.androidev.coding.module.commit.CommitsActivity;
 import com.androidev.coding.module.code.TreeActivity;
+import com.androidev.coding.module.commit.CommitsActivity;
 import com.androidev.coding.network.GitHub;
 import com.bumptech.glide.Glide;
 
 import static com.androidev.coding.misc.Constant.BRANCH;
-import static com.androidev.coding.misc.Constant.IS_README;
 import static com.androidev.coding.misc.Constant.OWNER;
 import static com.androidev.coding.misc.Constant.REPO;
 import static com.androidev.coding.misc.Constant.SHA;
 import static com.androidev.coding.misc.Constant.TITLE;
+import static com.androidev.coding.misc.Constant.TYPE;
+import static com.androidev.coding.misc.Constant.TYPE_README;
 
 public class MainFragment extends Fragment implements View.OnClickListener {
 
@@ -163,7 +164,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
             intent.putExtra(OWNER, mOwner);
             intent.putExtra(REPO, mRepo);
             intent.putExtra(SHA, mBranch);
-            intent.putExtra(IS_README, true);
+            intent.putExtra(TYPE, TYPE_README);
             intent.setClass(getContext(), CodeActivity.class);
             startActivity(intent);
         }

@@ -11,8 +11,8 @@ import android.support.v7.widget.RecyclerView;
 import com.androidev.coding.R;
 import com.androidev.coding.model.Tree;
 import com.androidev.coding.module.base.BaseActivity;
-import com.androidev.coding.module.image.ImageActivity;
 import com.androidev.coding.module.code.adapter.TreeAdapter;
+import com.androidev.coding.module.image.ImageActivity;
 import com.androidev.coding.widget.SwipeBackLayout;
 import com.androidev.refreshlayout.RefreshLayout;
 
@@ -20,6 +20,9 @@ import static com.androidev.coding.misc.Constant.BLOB;
 import static com.androidev.coding.misc.Constant.PATH;
 import static com.androidev.coding.misc.Constant.SHA;
 import static com.androidev.coding.misc.Constant.TREE;
+import static com.androidev.coding.misc.Constant.TYPE;
+import static com.androidev.coding.misc.Constant.TYPE_CODE;
+import static com.androidev.coding.misc.Misc.isImage;
 
 public class TreeActivity extends BaseActivity {
 
@@ -44,6 +47,7 @@ public class TreeActivity extends BaseActivity {
                 if (isImage(data.path)) {
                     intent.setClass(this, ImageActivity.class);
                 } else {
+                    intent.putExtra(TYPE, TYPE_CODE);
                     intent.setClass(this, CodeActivity.class);
                 }
                 startActivity(intent);
@@ -66,14 +70,6 @@ public class TreeActivity extends BaseActivity {
     void setError(Throwable throwable) {
         mRefreshLayout.setRefreshing(false);
         throwable.printStackTrace();
-    }
-
-    private boolean isImage(String name) {
-        return name.endsWith(".png") ||
-                name.endsWith(".jpg") ||
-                name.endsWith(".webp") ||
-                name.endsWith(".gif") ||
-                name.endsWith(".svg");
     }
 
 }

@@ -61,6 +61,6 @@
         android:layout_below="@id/coding_divider"
         android:paddingTop="8dp"
         android:textColor="?android:textColorSecondary"
-        android:textSize="13sp" />
+        android:textSize="12sp" />
 
 </RelativeLayout>

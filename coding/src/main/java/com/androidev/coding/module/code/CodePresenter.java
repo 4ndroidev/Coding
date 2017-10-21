@@ -16,12 +16,16 @@ import okhttp3.ResponseBody;
 import okio.BufferedSource;
 import okio.Okio;
 
-import static com.androidev.coding.misc.Constant.IS_README;
 import static com.androidev.coding.misc.Constant.OWNER;
+import static com.androidev.coding.misc.Constant.PATCH;
 import static com.androidev.coding.misc.Constant.PATH;
 import static com.androidev.coding.misc.Constant.README_MD_LOWERCASE;
 import static com.androidev.coding.misc.Constant.REPO;
 import static com.androidev.coding.misc.Constant.SHA;
+import static com.androidev.coding.misc.Constant.TYPE;
+import static com.androidev.coding.misc.Constant.TYPE_CODE;
+import static com.androidev.coding.misc.Constant.TYPE_DIFF;
+import static com.androidev.coding.misc.Constant.TYPE_README;
 
 class CodePresenter {
 
@@ -30,7 +34,7 @@ class CodePresenter {
     private String mOwner;
     private String mRepo;
     private String mSha;
-    private boolean isReadme;
+    private int mType;
 
     @SuppressWarnings("all")
     CodePresenter(CodeActivity view) {
@@ -40,13 +44,13 @@ class CodePresenter {
         mRepo = intent.getStringExtra(REPO);
         mPath = intent.getStringExtra(PATH);
         mSha = intent.getStringExtra(SHA);
-        isReadme = intent.getBooleanExtra(IS_README, false);
+        mType = intent.getIntExtra(TYPE, TYPE_CODE);
         mView.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        if (isReadme) {
+        if (TYPE_README == mType) {
             mView.setTitle(R.string.coding_readme);
             mPath = README_MD_LOWERCASE;
         } else {
-            mView.setTitle(mPath);
+            mView.setTitle(mPath.substring(mPath.lastIndexOf("/") + 1));
         }
     }
 
@@ -54,8 +58,13 @@ class CodePresenter {
         mView.startLoading();
         RestApi api = GitHub.getApi();
         Observable<ResponseBody> requestRaw;
-        if (isReadme) {
+        if (TYPE_README == mType) {
             requestRaw = api.tree(mOwner, mRepo, mSha).switchMap(tree -> api.raw(mOwner, mRepo, tree4readme(tree)));
+        } else if (TYPE_DIFF == mType) {
+            requestRaw = Observable.create(e -> {
+                e.onNext(ResponseBody.create(null, mView.getIntent().getStringExtra(PATCH)));
+                e.onComplete();
+            });
         } else {
             requestRaw = api.raw(mOwner, mRepo, mSha);
         }
@@ -63,7 +72,6 @@ class CodePresenter {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(mView::setData, mView::setError);
-
     }
 
     private String tree4readme(Tree data) {
@@ -77,8 +85,9 @@ class CodePresenter {
 
     private Observable<String> readTemplate() {
         return Observable.create(e -> {
-            boolean isMarkdown = isReadme || mPath.endsWith(".md");
-            String path = isMarkdown ? "coding/markdown.html" : "coding/code.html";
+            boolean isMarkdown = mType == TYPE_README || mPath.endsWith(".md");
+            String path = isMarkdown ? "coding/markdown.html" :
+                    TYPE_DIFF == mType ? "coding/diff.html" : "coding/code.html";
             BufferedSource source = Okio.buffer(Okio.source(mView.getAssets().open(path)));
             String template = new String(source.readByteArray());
             source.close();
@@ -89,11 +98,14 @@ class CodePresenter {
 
     private String applyTemplate(String template, ResponseBody body) throws IOException {
         String content = body.string();
-        boolean isMarkdown = isReadme || mPath.endsWith(".md");
+        boolean isMarkdown = mType == TYPE_README || mPath.endsWith(".md");
         if (isMarkdown) {
             content = content.replace("\n", "\\n").replace("\"", "\\\"").replace("'", "\\'");
         } else {
-            content = content.replace("<", "&lt;").replace(">", "&gt;").replace("\u2028", "").replace("\u2029", "");
+            content = content.replace("\u2028", "").replace("\u2029", "");
+            if (TYPE_CODE == mType) {
+                content = content.replace("<", "&lt;").replace(">", "&gt;");
+            }
         }
         return template.replace("${content_placeholder}", content)
                 .replace("${lang_placeholder}", mPath.substring(mPath.lastIndexOf(".") + 1));

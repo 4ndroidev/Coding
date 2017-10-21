@@ -21,4 +21,5 @@
     <string name="coding_change_format" formatted="false">%d个文件</string>
     <string name="coding_addition_format" formatted="false">%d个增加</string>
     <string name="coding_deletion_format" formatted="false">%d个删除</string>
+    <string name="coding_image_deleted">服务端图片已删除，无法预览</string>
 </resources>

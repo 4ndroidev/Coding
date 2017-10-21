@@ -14,9 +14,15 @@ public class Constant {
 
     public final static String MODIFIED = "modified";
     public final static String ADDED = "added";
-    public final static String DELETED = "deleted";
+    public final static String REMOVED = "removed";
+    public final static String RENAMED = "renamed";
 
-    public final static String IS_README = "is_readme";
+    public final static String PATCH = "patch";
+    public final static String TYPE = "type";
+    public final static int TYPE_CODE = 0;
+    public final static int TYPE_README = 1;
+    public final static int TYPE_DIFF = 2;
+
     public final static String README_MD_LOWERCASE = "readme.md";
     public final static String DOWNLOAD_DESTINATION = "Download";
     public final static String HEADER_ACCEPT = "Accept";

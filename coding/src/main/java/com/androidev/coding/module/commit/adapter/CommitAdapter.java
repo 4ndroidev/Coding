@@ -28,6 +28,7 @@ import static com.androidev.coding.misc.Constant.HOUR;
 import static com.androidev.coding.misc.Constant.MINUTE;
 import static com.androidev.coding.misc.Constant.MODIFIED;
 import static com.androidev.coding.misc.Constant.MONTH;
+import static com.androidev.coding.misc.Constant.RENAMED;
 import static com.androidev.coding.network.GitHub.time2date;
 
 public class CommitAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -36,6 +37,7 @@ public class CommitAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private final static int TYPE_HEADER = 2;
 
     private Commit mCommit;
+    private OnItemClickListener<Commit.File> mOnItemClickListener;
 
     private View createItemView(int layoutId, ViewGroup parent) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
@@ -84,6 +86,10 @@ public class CommitAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         notifyDataSetChanged();
     }
 
+    public void setOnItemClickListener(OnItemClickListener<Commit.File> listener) {
+        this.mOnItemClickListener = listener;
+    }
+
     private class FileViewHolder extends RecyclerView.ViewHolder {
         private ImageView icon;
         private TextView title, addition, deletion;
@@ -94,6 +100,12 @@ public class CommitAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             title = (TextView) itemView.findViewById(R.id.coding_title);
             addition = (TextView) itemView.findViewById(R.id.coding_addition);
             deletion = (TextView) itemView.findViewById(R.id.coding_deletion);
+            itemView.setOnClickListener(v -> {
+                if (mOnItemClickListener != null) {
+                    int position = getAdapterPosition() - 1;
+                    mOnItemClickListener.onItemClick(v, position, mCommit.files.get(position));
+                }
+            });
         }
 
         private void setData(Commit.File data) {
@@ -106,10 +118,10 @@ public class CommitAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
 
         private int status4image(String status) {
-            if (MODIFIED.equals(status)) {
+            if (MODIFIED.equals(status) || RENAMED.equals(status)) {
                 return R.drawable.coding_icon_modification;
             } else if (ADDED.equals(status)) {
-                return R.drawable.coding_icon_insertion;
+                return R.drawable.coding_icon_addition;
             } else {
                 return R.drawable.coding_icon_deletion;
             }
@@ -120,6 +132,7 @@ public class CommitAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         private Context context;
         private ImageView icon;
         private TextView name, time, message, change;
+        private int additionColor, deletionColor;
 
         private HeaderViewHolder(View itemView) {
             super(itemView);
@@ -129,6 +142,10 @@ public class CommitAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             time = (TextView) itemView.findViewById(R.id.coding_time);
             message = (TextView) itemView.findViewById(R.id.coding_message);
             change = (TextView) itemView.findViewById(R.id.coding_change);
+            Resources resources = context.getResources();
+            Resources.Theme theme = context.getTheme();
+            additionColor = ResourcesCompat.getColor(resources, R.color.colorAddition, theme);
+            deletionColor = ResourcesCompat.getColor(resources, R.color.colorDeletion, theme);
         }
 
         private void setData(Commit data) {
@@ -138,10 +155,6 @@ public class CommitAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             name.setText(data.commit.author.name);
             time.setText(getTimeStamp(data.commit.committer.date));
             message.setText(data.commit.message);
-            Resources resources = context.getResources();
-            Resources.Theme theme = context.getTheme();
-            int additionColor = ResourcesCompat.getColor(resources, R.color.colorAddition, theme);
-            int deletionColor = ResourcesCompat.getColor(resources, R.color.colorDeletion, theme);
             int fileSize = data.files.size();
             int additions = data.stats.additions;
             int deletions = data.stats.deletions;
@@ -176,5 +189,9 @@ public class CommitAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             } else
                 return new SimpleDateFormat(context.getString(R.string.coding_date_format), Locale.US).format(date);
         }
+    }
+
+    public interface OnItemClickListener<T> {
+        void onItemClick(View v, int position, T data);
     }
 }

@@ -802,7 +802,7 @@ var htmlEscape = function (content) {
   return div.innerHTML;
 };
 var diff = function (data) {
-  if (!data.diffLines) {
+  if (!data.lines) {
     return '<div class="diff" style="border: none">' + data + '</div>';
   }
   var html = [];
@@ -818,14 +818,14 @@ var diff = function (data) {
   } else if (data.fileType === 'binary') {
      html.push(noPreview);
   } else {
-    var diffLines = data.diffLines;
-    if (diffLines.length === 0) {
+    var lines = data.lines;
+    if (lines.length === 0) {
       html.push(noDiff);
       html.push('</div>');
       return html.join('');
     }
     html.push('<table><tbody>');
-    $.each(diffLines, function (i, diffLine) {
+    $.each(lines, function (i, diffLine) {
       var prefixClass = 'ge';
       if (diffLine.prefix === '+') {
         prefixClass = 'gi';
@@ -992,17 +992,11 @@ var friendlyTime = function (time, format) {
 }
 $(function() {
   var diffContent = $('#diff-content');
-  var data = ${diff-content};
-  //var data = '';
-  var comments = ${comments};
-  //var comments = '';
-
-  // Diff
-  diffContent.html(diff(data.data));
+  var data = ${content_placeholder};
+  console.log(data);
+  diffContent.html(diff(data));
 
 
-  // Comments
-  generateComments(comments.data);
 
 });
 
