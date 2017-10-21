@@ -3,5 +3,5 @@
 Usage: 
 
 ```java
-new Coding(this).owner("4ndroidev").repo("CodingSample").branch("master").attach(R.id.coding);
+new Coding(this).owner("4ndroidev").repo("Coding").branch("master").attach(R.id.coding);
 ```

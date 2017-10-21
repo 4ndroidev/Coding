@@ -11,6 +11,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        new Coding(this).owner("square").repo("okhttp").branch("master").attach(R.id.coding);
+        new Coding(this).owner("4ndroidev").repo("Coding").branch("master").attach(R.id.coding);
     }
 }
