@@ -85,9 +85,19 @@ class CodePresenter {
 
     private Observable<String> readTemplate() {
         return Observable.create(e -> {
-            boolean isMarkdown = mType == TYPE_README || mPath.endsWith(".md");
-            String path = isMarkdown ? "coding/markdown.html" :
-                    TYPE_DIFF == mType ? "coding/diff.html" : "coding/code.html";
+            String path;
+            switch (mType) {
+                case TYPE_DIFF:
+                    path = "coding/diff.html";
+                    break;
+                case TYPE_README:
+                    path = "coding/markdown.html";
+                    break;
+                case TYPE_CODE:
+                default:
+                    path = mPath.endsWith(".md") ? "coding/markdown.html" : "coding/code.html";
+                    break;
+            }
             BufferedSource source = Okio.buffer(Okio.source(mView.getAssets().open(path)));
             String template = new String(source.readByteArray());
             source.close();
@@ -98,14 +108,13 @@ class CodePresenter {
 
     private String applyTemplate(String template, ResponseBody body) throws IOException {
         String content = body.string();
-        boolean isMarkdown = mType == TYPE_README || mPath.endsWith(".md");
-        if (isMarkdown) {
+        if (TYPE_DIFF == mType) {
+            content = content.replace("\u2028", "").replace("\u2029", "");
+        } else if (TYPE_README == mType || mPath.endsWith(".md")) {
             content = content.replace("\n", "\\n").replace("\"", "\\\"").replace("'", "\\'");
         } else {
-            content = content.replace("\u2028", "").replace("\u2029", "");
-            if (TYPE_CODE == mType) {
-                content = content.replace("<", "&lt;").replace(">", "&gt;");
-            }
+            content = content.replace("\u2028", "").replace("\u2029", "")
+                    .replace("<", "&lt;").replace(">", "&gt;");
         }
         return template.replace("${content_placeholder}", content)
                 .replace("${lang_placeholder}", mPath.substring(mPath.lastIndexOf(".") + 1));
