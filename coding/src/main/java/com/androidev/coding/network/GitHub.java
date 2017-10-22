@@ -69,6 +69,7 @@ public class GitHub {
 
     public void initialize(Context context) {
         authorizeInterceptor = new AuthorizeInterceptor();
+        authorizeInterceptor.setToken(context.getSharedPreferences(APP, Context.MODE_PRIVATE).getString(KEY_TOKEN, ""));
         File cachePath = new File(context.getExternalCacheDir(), "coding");
         okHttpClient = new OkHttpClient.Builder()
                 .cache(new Cache(cachePath, 30 * 1024 * 1024/* 30MB */))
@@ -84,7 +85,6 @@ public class GitHub {
                 .build();
         restApi = retrofit.create(RestApi.class);
         rateLimit = new RateLimit();
-        authorize(context.getSharedPreferences(APP, Context.MODE_PRIVATE).getString(KEY_TOKEN, ""));
     }
 
     public void authorize(String token) {

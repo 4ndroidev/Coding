@@ -25,5 +25,6 @@
     <string name="coding_login_authorize">登录授权</string>
     <string name="coding_authorize_success">授权成功</string>
     <string name="coding_authorize_failure">授权失败</string>
+    <string name="coding_rate_limit_tip">访问限制: 未刷新</string>
     <string name="coding_rate_limit_format" formatted="false">访问限制:  %d/%d</string>
 </resources>

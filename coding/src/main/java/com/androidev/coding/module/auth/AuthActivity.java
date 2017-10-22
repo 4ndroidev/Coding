@@ -51,17 +51,6 @@ public class AuthActivity extends BaseActivity {
         mWebView = (WebView) findViewById(R.id.coding_web_view);
         mWebView.setBackgroundColor(Color.TRANSPARENT);
         mWebView.setWebViewClient(new WebViewClient() {
-
-            @Override
-            public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                super.onPageStarted(view, url, favicon);
-            }
-
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                super.onPageFinished(view, url);
-            }
-
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 if (url.startsWith(REDIRECT_URI)) {
@@ -70,6 +59,20 @@ public class AuthActivity extends BaseActivity {
                     mWebView.loadUrl(url);
                 }
                 return true;
+            }
+
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                super.onPageStarted(view, url, favicon);
+                showLoading();
+            }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+                if (url.startsWith(REDIRECT_URI))
+                    return;
+                dismissLoading();
             }
         });
         startAuthorize();
@@ -116,6 +119,7 @@ public class AuthActivity extends BaseActivity {
         getSharedPreferences(APP, Context.MODE_PRIVATE).edit().putString(KEY_TOKEN, token).apply();
         GitHub.getInstance().authorize(token);
         mWebView.post(() -> {
+            dismissLoading();
             int message = TextUtils.isEmpty(token) ? R.string.coding_authorize_failure : R.string.coding_authorize_success;
             Toast.makeText(AuthActivity.this, message, Toast.LENGTH_SHORT).show();
             finish();

@@ -60,7 +60,7 @@ public class TreeActivity extends BaseActivity {
         recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
         recyclerView.setAdapter(mAdapter);
         presenter.refresh();
-        showLoading();
+        showLoading();  //just one time
     }
 
     void setData(Tree data) {
