@@ -42,14 +42,17 @@ public class CommitsActivity extends BaseActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(mAdapter);
         presenter.refresh();
+        showLoading();
     }
 
     void setData(List<Commit> commits) {
+        dismissLoading();
         mRefreshLayout.setRefreshing(false);
         mAdapter.setData(commits);
     }
 
-    void setError(Throwable throwable){
+    void setError(Throwable throwable) {
+        dismissLoading();
         mRefreshLayout.setRefreshing(false);
         throwable.printStackTrace();
     }

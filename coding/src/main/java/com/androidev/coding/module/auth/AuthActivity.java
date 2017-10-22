@@ -1,15 +1,12 @@
 package com.androidev.coding.module.auth;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.View;
 import android.view.Window;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.view.animation.LinearInterpolator;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
@@ -54,9 +51,15 @@ public class AuthActivity extends BaseActivity {
         mWebView = (WebView) findViewById(R.id.coding_web_view);
         mWebView.setBackgroundColor(Color.TRANSPARENT);
         mWebView.setWebViewClient(new WebViewClient() {
+
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                super.onPageStarted(view, url, favicon);
+            }
+
             @Override
             public void onPageFinished(WebView view, String url) {
-                stopLoading();
+                super.onPageFinished(view, url);
             }
 
             @Override
@@ -72,23 +75,7 @@ public class AuthActivity extends BaseActivity {
         startAuthorize();
     }
 
-    private void startLoading() {
-        findViewById(R.id.coding_loading).setVisibility(View.VISIBLE);
-        Animation animation = AnimationUtils.loadAnimation(this, R.anim.coding_loading_rotate_animation);
-        animation.setRepeatMode(Animation.INFINITE);
-        animation.setRepeatCount(Animation.INFINITE);
-        animation.setInterpolator(new LinearInterpolator());
-        animation.setDuration(3000);
-        findViewById(R.id.coding_loading_anim).startAnimation(animation);
-    }
-
-    private void stopLoading() {
-        findViewById(R.id.coding_loading_anim).clearAnimation();
-        findViewById(R.id.coding_loading).setVisibility(View.GONE);
-    }
-
     private void startAuthorize() {
-        startLoading();
         String format = "%s?client_id=%s&redirect_uri=%s";
         String url = String.format(format, AUTHORIZE_URL, CLIENT_ID, REDIRECT_URI);
         mWebView.loadUrl(url);

@@ -10,6 +10,4 @@
         android:layout_height="match_parent"
         android:overScrollMode="never" />
 
-    <include layout="@layout/coding_layout_loading" />
-
 </FrameLayout>

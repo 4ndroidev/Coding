@@ -17,9 +17,9 @@ import com.androidev.coding.module.image.ImageActivity;
 import com.androidev.coding.widget.SwipeBackLayout;
 import com.androidev.refreshlayout.RefreshLayout;
 
-import static com.androidev.coding.misc.Constant.REMOVED;
 import static com.androidev.coding.misc.Constant.PATCH;
 import static com.androidev.coding.misc.Constant.PATH;
+import static com.androidev.coding.misc.Constant.REMOVED;
 import static com.androidev.coding.misc.Constant.SHA;
 import static com.androidev.coding.misc.Constant.TYPE;
 import static com.androidev.coding.misc.Constant.TYPE_DIFF;
@@ -67,14 +67,17 @@ public class CommitActivity extends BaseActivity {
         recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
         recyclerView.setAdapter(mAdapter);
         presenter.refresh();
+        showLoading();
     }
 
     void setData(Commit commit) {
+        dismissLoading();
         mRefreshLayout.setRefreshing(false);
         mAdapter.setData(commit);
     }
 
     void setError(Throwable throwable) {
+        dismissLoading();
         mRefreshLayout.setRefreshing(false);
         throwable.printStackTrace();
     }
