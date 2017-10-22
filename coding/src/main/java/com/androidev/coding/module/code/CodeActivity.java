@@ -15,7 +15,8 @@ import android.webkit.WebViewClient;
 
 import com.androidev.coding.R;
 import com.androidev.coding.module.base.BaseActivity;
-import com.androidev.coding.network.GitHub;
+
+import static com.androidev.coding.misc.Constant.BASE_URL;
 
 public class CodeActivity extends BaseActivity {
 
@@ -82,8 +83,7 @@ public class CodeActivity extends BaseActivity {
     }
 
     void setData(String data) {
-        stopLoading();
-        mWebView.loadDataWithBaseURL(GitHub.BASE_URL, data, "text/html", "UTF-8", null);
+        mWebView.loadDataWithBaseURL(BASE_URL, data, "text/html", "UTF-8", null);
     }
 
 }

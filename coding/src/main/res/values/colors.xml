@@ -8,6 +8,6 @@
     <color name="colorTintLight">@color/colorPrimary</color>
     <color name="colorAddition">#ff98c685</color>
     <color name="colorDeletion">#ffdf7d78</color>
-    <color name="colorChange">#ff45c0ee</color>
-    <color name="colorRename">#ff4fc3f7</color>
+    <color name="colorHighlight">#ff45c0ee</color>
+    <color name="colorWarning">#e57373</color>
 </resources>

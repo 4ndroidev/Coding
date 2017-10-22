@@ -6,7 +6,6 @@ import android.text.TextUtils;
 import com.androidev.coding.model.Patch;
 import com.androidev.coding.network.GitHub;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -71,7 +70,7 @@ class CommitPresenter {
             }
         }
         try {
-            return new ObjectMapper().writeValueAsString(patch);
+            return GitHub.getObjectMapper().writeValueAsString(patch);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }

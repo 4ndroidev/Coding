@@ -11,6 +11,11 @@
         android:supportsRtl="true">
 
         <activity
+            android:name=".module.auth.AuthActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AuthTheme" />
+
+        <activity
             android:name=".module.commit.CommitsActivity"
             android:label="@string/coding_commit"
             android:theme="@style/SwipeBackTheme" />

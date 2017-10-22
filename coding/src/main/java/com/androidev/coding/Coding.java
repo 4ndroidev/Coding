@@ -1,14 +1,18 @@
 package com.androidev.coding;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.util.Log;
 
 import com.androidev.coding.module.main.MainFragment;
+import com.androidev.coding.network.GitHub;
 
+import static com.androidev.coding.misc.Constant.APP;
 import static com.androidev.coding.misc.Constant.BRANCH;
 import static com.androidev.coding.misc.Constant.DEFAULT_BRANCH;
+import static com.androidev.coding.misc.Constant.KEY_TOKEN;
 import static com.androidev.coding.misc.Constant.OWNER;
 import static com.androidev.coding.misc.Constant.REPO;
 
@@ -23,6 +27,8 @@ public class Coding {
 
     public Coding(FragmentActivity activity) {
         this.activity = activity;
+        String token = activity.getSharedPreferences(APP, Context.MODE_PRIVATE).getString(KEY_TOKEN, "");
+        GitHub.getInstance().authorize(token);
     }
 
     public Coding owner(String owner) {

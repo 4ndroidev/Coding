@@ -6,44 +6,52 @@ import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
 
-import java.io.File;
-import java.text.ParsePosition;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-import java.util.TimeZone;
+import com.androidev.coding.model.RateLimit;
+import com.androidev.coding.network.interceptor.AuthorizeInterceptor;
+import com.androidev.coding.network.interceptor.RateLimitInterceptor;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.io.File;
+import java.util.Locale;
+
+import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
+import static com.androidev.coding.misc.Constant.BASE_URL;
 import static com.androidev.coding.misc.Constant.DOWNLOAD_DESTINATION;
 
 public class GitHub {
 
-    public final static String BASE_URL = "https://api.github.com";
-
     private final static String TAG = "GitHub";
     private final static String DOWNLOAD_URL_FORMAT = "https://github.com/%s/%s/archive/%s.zip";
-    private final static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
-
-    static {
-        DATE_FORMAT.setTimeZone(TimeZone.getTimeZone("UTC"));
-    }
 
     private final static class GitHubHolder {
         private final static GitHub instance = new GitHub();
     }
 
     private RestApi restApi;
+    private ObjectMapper objectMapper;
+    private OkHttpClient okHttpClient;
+    private AuthorizeInterceptor authorizeInterceptor;
+    private RateLimit rateLimit;
 
     private GitHub() {
+        authorizeInterceptor = new AuthorizeInterceptor();
+        okHttpClient = new OkHttpClient.Builder()
+                .addInterceptor(authorizeInterceptor)
+                .addNetworkInterceptor(new RateLimitInterceptor())
+                .build();
+        objectMapper = new ObjectMapper();
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
+                .callFactory(okHttpClient)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .addConverterFactory(JacksonConverterFactory.create())
+                .addConverterFactory(JacksonConverterFactory.create(objectMapper))
                 .build();
         restApi = retrofit.create(RestApi.class);
+        rateLimit = new RateLimit();
     }
 
     public static GitHub getInstance() {
@@ -54,8 +62,24 @@ public class GitHub {
         return GitHubHolder.instance.restApi;
     }
 
-    public static Date time2date(String timestamp) {
-        return DATE_FORMAT.parse(timestamp, new ParsePosition(0));
+    public static OkHttpClient getHttpClient() {
+        return GitHubHolder.instance.okHttpClient;
+    }
+
+    public static ObjectMapper getObjectMapper() {
+        return GitHubHolder.instance.objectMapper;
+    }
+
+    public void setRateLimit(RateLimit limit) {
+        this.rateLimit = limit;
+    }
+
+    public RateLimit getRateLimit() {
+        return this.rateLimit;
+    }
+
+    public void authorize(String token) {
+        authorizeInterceptor.setToken(token);
     }
 
     public void download(Context context, String owner, String repo, String branch) {

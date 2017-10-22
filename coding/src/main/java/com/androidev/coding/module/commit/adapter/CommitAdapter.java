@@ -29,7 +29,7 @@ import static com.androidev.coding.misc.Constant.MINUTE;
 import static com.androidev.coding.misc.Constant.MODIFIED;
 import static com.androidev.coding.misc.Constant.MONTH;
 import static com.androidev.coding.misc.Constant.RENAMED;
-import static com.androidev.coding.network.GitHub.time2date;
+import static com.androidev.coding.misc.Misc.time2date;
 
 public class CommitAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 

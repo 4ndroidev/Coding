@@ -2,6 +2,19 @@ package com.androidev.coding.misc;
 
 public class Constant {
 
+    public final static String APP = "coding";
+
+    public final static String CLIENT_ID = "86bf73120d920665eff8";
+    public final static String CLIENT_SECRET = "62e7636dd170c87bb8a77a35af1767ac53131a12";
+    public final static String BASE_URL = "https://api.github.com";
+    public final static String REDIRECT_URI = "https://github.com/4ndroidev/Coding";
+    public final static String AUTHORIZE_URL = "https://github.com/login/oauth/authorize";
+    public final static String ACCESS_TOKEN_URL = "https://github.com/login/oauth/access_token";
+    public final static String KEY_AUTHORIZE_CODE = "code";
+    public final static String KEY_CLIENT_ID = "client_id";
+    public final static String KEY_CLIENT_SECRET = "client_secret";
+    public final static String KEY_TOKEN = "token";
+
     public final static String OWNER = "owner";
     public final static String REPO = "repo";
     public final static String BRANCH = "branch";

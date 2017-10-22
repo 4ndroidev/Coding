@@ -22,4 +22,8 @@
     <string name="coding_addition_format" formatted="false">%d个增加</string>
     <string name="coding_deletion_format" formatted="false">%d个删除</string>
     <string name="coding_image_deleted">服务端图片已删除，无法预览</string>
+    <string name="coding_login_authorize">登录授权</string>
+    <string name="coding_authorize_success">授权成功</string>
+    <string name="coding_authorize_failure">授权失败</string>
+    <string name="coding_rate_limit_format" formatted="false">访问限制:  %d/%d</string>
 </resources>

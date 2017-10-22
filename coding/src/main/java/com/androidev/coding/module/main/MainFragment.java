@@ -3,9 +3,11 @@ package com.androidev.coding.module.main;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.res.ResourcesCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +20,9 @@ import android.widget.TextView;
 
 import com.androidev.coding.R;
 import com.androidev.coding.misc.RoundTransform;
+import com.androidev.coding.model.RateLimit;
 import com.androidev.coding.model.Repo;
+import com.androidev.coding.module.auth.AuthActivity;
 import com.androidev.coding.module.code.CodeActivity;
 import com.androidev.coding.module.code.TreeActivity;
 import com.androidev.coding.module.commit.CommitsActivity;
@@ -42,6 +46,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     private ViewGroup mContentView;
     private MainPresenter mPresenter;
     private String mOwner, mRepo, mBranch;
+    private TextView mRateLimit;
 
     public static MainFragment newInstance(Bundle arguments) {
         MainFragment fragment = new MainFragment();
@@ -64,11 +69,18 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mContentView = (ViewGroup) inflater.inflate(R.layout.coding_fragment_main, container, false);
         mContentView.setFitsSystemWindows(true);
-        mContentView.findViewById(R.id.coding_connect).setOnClickListener(this);
+        mContentView.findViewById(R.id.coding_btn_authorize).setOnClickListener(this);
+        mContentView.findViewById(R.id.coding_btn_connect).setOnClickListener(this);
         mEmptyView = mContentView.findViewById(R.id.coding_empty);
         mLoadingView = mContentView.findViewById(R.id.coding_loading);
         mLoadingAnim = mContentView.findViewById(R.id.coding_loading_anim);
         return mContentView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateRateLimit();
     }
 
     @Override
@@ -103,6 +115,9 @@ public class MainFragment extends Fragment implements View.OnClickListener {
             mContentView.findViewById(R.id.coding_readme).setOnClickListener(this);
             mContentView.findViewById(R.id.coding_document).setOnClickListener(this);
             mContentView.findViewById(R.id.coding_download).setOnClickListener(this);
+            mContentView.findViewById(R.id.coding_authorize).setOnClickListener(this);
+            mRateLimit = (TextView) mContentView.findViewById(R.id.coding_limit);
+            updateRateLimit();
         }
         mEmptyView.setVisibility(View.GONE);
         ImageView icon = (ImageView) mContentView.findViewById(R.id.coding_icon);
@@ -125,6 +140,28 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         throwable.printStackTrace();
     }
 
+    private void updateRateLimit() {
+        if (mRateLimit == null) return;
+        RateLimit limit = GitHub.getInstance().getRateLimit();
+        if (limit.limit < 0 || limit.remaining < 0) return;
+        Resources resources = getResources();
+        Resources.Theme theme = getActivity().getTheme();
+        mRateLimit.setText(resources.getString(R.string.coding_rate_limit_format, limit.remaining, limit.limit));
+        int textColor;
+        if (limit.remaining <= 20) {
+            textColor = ResourcesCompat.getColor(resources, R.color.colorWarning, theme);
+        } else {
+            textColor = ResourcesCompat.getColor(resources, android.R.color.primary_text_light, theme);
+        }
+        mRateLimit.setTextColor(textColor);
+        View authorize = mContentView.findViewById(R.id.coding_authorize);
+        if (limit.limit >= RateLimit.MAX_LIMIT) {
+            authorize.setVisibility(View.GONE);
+        } else {
+            authorize.setVisibility(View.VISIBLE);
+        }
+    }
+
     private void download() {
         Activity activity = getActivity();
         new AlertDialog.Builder(activity)
@@ -141,8 +178,12 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        if (R.id.coding_connect == id || R.id.coding_icon == id) {
+        if (R.id.coding_btn_connect == id) {
             mPresenter.load();
+        } else if (R.id.coding_authorize == id || R.id.coding_btn_authorize == id) {
+            Intent intent = new Intent();
+            intent.setClass(getContext(), AuthActivity.class);
+            startActivity(intent);
         } else if (R.id.coding_download == id) {
             download();
         } else if (R.id.coding_commit == id) {
