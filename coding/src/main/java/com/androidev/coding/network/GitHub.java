@@ -20,8 +20,10 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
+import static com.androidev.coding.misc.Constant.APP;
 import static com.androidev.coding.misc.Constant.BASE_URL;
 import static com.androidev.coding.misc.Constant.DOWNLOAD_DESTINATION;
+import static com.androidev.coding.misc.Constant.KEY_TOKEN;
 
 public class GitHub {
 
@@ -39,22 +41,6 @@ public class GitHub {
     private RateLimit rateLimit;
 
     private GitHub() {
-        authorizeInterceptor = new AuthorizeInterceptor();
-        File cachePath = new File(Environment.getExternalStorageDirectory(), "coding");
-        okHttpClient = new OkHttpClient.Builder()
-                .cache(new Cache(cachePath, 30 * 1024 * 1024/* 30MB */))
-                .addInterceptor(authorizeInterceptor)
-                .addNetworkInterceptor(new RateLimitInterceptor())
-                .build();
-        objectMapper = new ObjectMapper();
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .callFactory(okHttpClient)
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .addConverterFactory(JacksonConverterFactory.create(objectMapper))
-                .build();
-        restApi = retrofit.create(RestApi.class);
-        rateLimit = new RateLimit();
     }
 
     public static GitHub getInstance() {
@@ -79,6 +65,26 @@ public class GitHub {
 
     public RateLimit getRateLimit() {
         return this.rateLimit;
+    }
+
+    public void initialize(Context context) {
+        authorizeInterceptor = new AuthorizeInterceptor();
+        File cachePath = new File(context.getExternalCacheDir(), "coding");
+        okHttpClient = new OkHttpClient.Builder()
+                .cache(new Cache(cachePath, 30 * 1024 * 1024/* 30MB */))
+                .addInterceptor(authorizeInterceptor)
+                .addNetworkInterceptor(new RateLimitInterceptor())
+                .build();
+        objectMapper = new ObjectMapper();
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .callFactory(okHttpClient)
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .addConverterFactory(JacksonConverterFactory.create(objectMapper))
+                .build();
+        restApi = retrofit.create(RestApi.class);
+        rateLimit = new RateLimit();
+        authorize(context.getSharedPreferences(APP, Context.MODE_PRIVATE).getString(KEY_TOKEN, ""));
     }
 
     public void authorize(String token) {
