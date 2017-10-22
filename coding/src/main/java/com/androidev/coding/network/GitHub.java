@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.util.Locale;
 
+import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
@@ -39,7 +40,9 @@ public class GitHub {
 
     private GitHub() {
         authorizeInterceptor = new AuthorizeInterceptor();
+        File cachePath = new File(Environment.getExternalStorageDirectory(), "coding");
         okHttpClient = new OkHttpClient.Builder()
+                .cache(new Cache(cachePath, 30 * 1024 * 1024/* 30MB */))
                 .addInterceptor(authorizeInterceptor)
                 .addNetworkInterceptor(new RateLimitInterceptor())
                 .build();
