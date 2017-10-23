@@ -135,6 +135,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         description.setText(repo.description);
         star.setText(String.valueOf(repo.stargazers_count));
         icon.setOnClickListener(this);
+        updateRateLimit(GitHub.getInstance().getRateLimit());
         stopAnimation();
     }
 

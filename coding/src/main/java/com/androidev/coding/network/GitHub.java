@@ -120,6 +120,10 @@ public class GitHub {
 
     // <editor-folder desc="RateLimit: https://developer.github.com/v3/#rate-limiting">
 
+    public RateLimit getRateLimit() {
+        return rateLimit;
+    }
+
     public void setRateLimit(RateLimit limit) {
         this.rateLimit = limit;
         notifyRateLimitChanged();
