@@ -4,6 +4,8 @@ import android.app.DownloadManager;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 import com.androidev.coding.model.RateLimit;
@@ -12,6 +14,8 @@ import com.androidev.coding.network.interceptor.RateLimitInterceptor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import okhttp3.Cache;
@@ -37,8 +41,15 @@ public class GitHub {
     private RestApi restApi;
     private ObjectMapper objectMapper;
     private OkHttpClient okHttpClient;
-    private AuthorizeInterceptor authorizeInterceptor;
+
+    /**
+     * rateLimit
+     * more detail: https://developer.github.com/v3/#rate-limiting
+     */
+    private Handler uiHandler;
     private RateLimit rateLimit;
+    private AuthorizeInterceptor authorizeInterceptor;
+    private List<OnRateLimitChangedListener> onRateLimitChangedListeners;
 
     private GitHub() {
     }
@@ -59,14 +70,6 @@ public class GitHub {
         return GitHubHolder.instance.objectMapper;
     }
 
-    public void setRateLimit(RateLimit limit) {
-        this.rateLimit = limit;
-    }
-
-    public RateLimit getRateLimit() {
-        return this.rateLimit;
-    }
-
     public void initialize(Context context) {
         authorizeInterceptor = new AuthorizeInterceptor();
         authorizeInterceptor.setToken(context.getSharedPreferences(APP, Context.MODE_PRIVATE).getString(KEY_TOKEN, ""));
@@ -85,6 +88,8 @@ public class GitHub {
                 .build();
         restApi = retrofit.create(RestApi.class);
         rateLimit = new RateLimit();
+        uiHandler = new Handler(Looper.getMainLooper());
+        onRateLimitChangedListeners = new ArrayList<>();
     }
 
     public void authorize(String token) {
@@ -112,4 +117,47 @@ public class GitHub {
         String format = BASE_URL + "/repos/%s/%s/git/blobs/%s";
         return String.format(format, owner, repo, sha);
     }
+
+    // <editor-folder desc="RateLimit: https://developer.github.com/v3/#rate-limiting">
+
+    public void setRateLimit(RateLimit limit) {
+        this.rateLimit = limit;
+        notifyRateLimitChanged();
+    }
+
+    public void addOnRateLimitChangedListener(OnRateLimitChangedListener onRateLimitChangedListener) {
+        synchronized (this) {
+            if (onRateLimitChangedListener == null) return;
+            if (!onRateLimitChangedListeners.contains(onRateLimitChangedListener)) {
+                onRateLimitChangedListeners.add(onRateLimitChangedListener);
+            }
+            onRateLimitChangedListener.onRateLimitChanged(rateLimit);
+        }
+    }
+
+    public void removeOnRateLimitChangedListener(OnRateLimitChangedListener onRateLimitChangedListener) {
+        synchronized (this) {
+            if (onRateLimitChangedListener == null) return;
+            if (!onRateLimitChangedListeners.contains(onRateLimitChangedListener)) {
+                return;
+            }
+            onRateLimitChangedListeners.remove(onRateLimitChangedListener);
+        }
+    }
+
+    private void notifyRateLimitChanged() {
+        synchronized (this) {
+            uiHandler.post(() -> {
+                for (OnRateLimitChangedListener onRateLimitChangedListener : onRateLimitChangedListeners) {
+                    onRateLimitChangedListener.onRateLimitChanged(rateLimit);
+                }
+            });
+        }
+    }
+
+    public interface OnRateLimitChangedListener {
+        void onRateLimitChanged(RateLimit rateLimit);
+    }
+
+    // </editor-folder>
 }

@@ -39,6 +39,8 @@ import static com.androidev.coding.misc.Constant.TYPE_README;
 
 public class MainFragment extends Fragment implements View.OnClickListener {
 
+    private final static int AUTHORIZE_REQUEST_CODE = 10000;
+
     private boolean isInflated;
     private View mEmptyView;
     private View mLoadingView;
@@ -47,6 +49,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     private MainPresenter mPresenter;
     private String mOwner, mRepo, mBranch;
     private TextView mRateLimit;
+    private GitHub.OnRateLimitChangedListener mOnRateLimitChangedListener;
 
     public static MainFragment newInstance(Bundle arguments) {
         MainFragment fragment = new MainFragment();
@@ -62,6 +65,8 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         mOwner = arguments.getString(OWNER);
         mRepo = arguments.getString(REPO);
         mBranch = arguments.getString(BRANCH);
+        mOnRateLimitChangedListener = this::updateRateLimit;
+        GitHub.getInstance().addOnRateLimitChangedListener(mOnRateLimitChangedListener);
     }
 
     @Nullable
@@ -78,15 +83,15 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        updateRateLimit();
-    }
-
-    @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mPresenter.load();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        GitHub.getInstance().removeOnRateLimitChangedListener(mOnRateLimitChangedListener);
     }
 
     void startAnimation() {
@@ -117,7 +122,6 @@ public class MainFragment extends Fragment implements View.OnClickListener {
             mContentView.findViewById(R.id.coding_download).setOnClickListener(this);
             mContentView.findViewById(R.id.coding_authorize).setOnClickListener(this);
             mRateLimit = (TextView) mContentView.findViewById(R.id.coding_limit);
-            updateRateLimit();
         }
         mEmptyView.setVisibility(View.GONE);
         ImageView icon = (ImageView) mContentView.findViewById(R.id.coding_icon);
@@ -140,22 +144,24 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         throwable.printStackTrace();
     }
 
-    private void updateRateLimit() {
+    private void updateRateLimit(RateLimit rateLimit) {
         if (mRateLimit == null) return;
-        RateLimit limit = GitHub.getInstance().getRateLimit();
-        if (limit.limit < 0 || limit.remaining < 0) return;
+        if (rateLimit.limit < 0 || rateLimit.remaining < 0) {
+            mRateLimit.setText(R.string.coding_rate_limit_tip);
+            return;
+        }
         Resources resources = getResources();
         Resources.Theme theme = getActivity().getTheme();
-        mRateLimit.setText(resources.getString(R.string.coding_rate_limit_format, limit.remaining, limit.limit));
+        mRateLimit.setText(resources.getString(R.string.coding_rate_limit_format, rateLimit.remaining, rateLimit.limit));
         int textColor;
-        if (limit.remaining <= 20) {
+        if (rateLimit.remaining <= 20) {
             textColor = ResourcesCompat.getColor(resources, R.color.colorWarning, theme);
         } else {
             textColor = ResourcesCompat.getColor(resources, android.R.color.primary_text_light, theme);
         }
         mRateLimit.setTextColor(textColor);
         View authorize = mContentView.findViewById(R.id.coding_authorize);
-        if (limit.limit >= RateLimit.MAX_LIMIT) {
+        if (rateLimit.limit >= RateLimit.MAX_LIMIT) {
             authorize.setVisibility(View.GONE);
         } else {
             authorize.setVisibility(View.VISIBLE);
@@ -183,7 +189,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         } else if (R.id.coding_authorize == id || R.id.coding_btn_authorize == id) {
             Intent intent = new Intent();
             intent.setClass(getContext(), AuthActivity.class);
-            startActivity(intent);
+            startActivityForResult(intent, AUTHORIZE_REQUEST_CODE);
         } else if (R.id.coding_download == id) {
             download();
         } else if (R.id.coding_commit == id) {
@@ -208,6 +214,14 @@ public class MainFragment extends Fragment implements View.OnClickListener {
             intent.putExtra(TYPE, TYPE_README);
             intent.setClass(getContext(), CodeActivity.class);
             startActivity(intent);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (AUTHORIZE_REQUEST_CODE == requestCode && Activity.RESULT_OK == resultCode) {
+            mPresenter.load();
         }
     }
 }

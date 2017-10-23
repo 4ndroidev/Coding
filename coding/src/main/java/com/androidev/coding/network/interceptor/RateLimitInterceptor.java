@@ -16,7 +16,6 @@ public class RateLimitInterceptor implements Interceptor {
 
     private final static String KEY_RATE_LIMIT = "X-RateLimit-Limit";
     private final static String KEY_RATE_REMAINING = "X-RateLimit-Remaining";
-    private final static String KEY_RATE_RESET = "X-RateLimit-Reset";
 
     @Override
     public Response intercept(Chain chain) throws IOException {
@@ -28,6 +27,8 @@ public class RateLimitInterceptor implements Interceptor {
             int limitValue = Integer.parseInt(limit);
             int remainingValue = Integer.parseInt(remaining);
             GitHub.getInstance().setRateLimit(new RateLimit(limitValue, remainingValue));
+        } else {
+            GitHub.getInstance().setRateLimit(new RateLimit());
         }
         return response;
     }

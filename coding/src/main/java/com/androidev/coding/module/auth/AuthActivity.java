@@ -1,5 +1,6 @@
 package com.androidev.coding.module.auth;
 
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
@@ -37,10 +38,9 @@ public class AuthActivity extends BaseActivity {
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 if (url.startsWith(REDIRECT_URI)) {
                     mPresenter.code4token(Uri.parse(url).getQueryParameter(KEY_AUTHORIZE_CODE));
-                } else {
-                    mWebView.loadUrl(url);
+                    return true;
                 }
-                return true;
+                return super.shouldOverrideUrlLoading(view, url);
             }
 
             @Override
@@ -52,9 +52,9 @@ public class AuthActivity extends BaseActivity {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                if (url.startsWith(REDIRECT_URI))
-                    return;
-                dismissLoading();
+                if (!url.startsWith(REDIRECT_URI)) {
+                    dismissLoading();
+                }
             }
 
 
@@ -72,6 +72,7 @@ public class AuthActivity extends BaseActivity {
             dismissLoading();
             int message = success ? R.string.coding_authorize_success : R.string.coding_authorize_failure;
             Toast.makeText(AuthActivity.this, message, Toast.LENGTH_SHORT).show();
+            setResult(success ? Activity.RESULT_OK : Activity.RESULT_CANCELED);
             finish();
         });
     }
