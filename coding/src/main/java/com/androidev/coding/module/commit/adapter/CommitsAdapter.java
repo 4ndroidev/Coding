@@ -124,11 +124,10 @@ public class CommitsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public void appendData(List<Commit> commits) {
         if (commits == null || commits.size() == 0)
             return;
+        int additionSize = commits.size();
         mCommits.addAll(commits);
-        int size = commits.size();
-        mCommits.addAll(commits);
-        notifyItemRangeInserted(mCommits.size() - size, size);
-        List parents = commits.get(size - 1).parents;
+        notifyItemRangeInserted(mCommits.size() - additionSize, additionSize);
+        List parents = commits.get(additionSize - 1).parents;
         boolean more = parents != null && parents.size() > 0;
         if (hasMore && !more) {
             hasMore = false;
