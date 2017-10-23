@@ -6,7 +6,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.Window;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
@@ -40,15 +40,21 @@ import static com.androidev.coding.misc.Constant.REDIRECT_URI;
 
 public class AuthActivity extends BaseActivity {
 
+
+    private static final String FAKE_USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36";
+
     private WebView mWebView;
 
     @Override
     @SuppressWarnings("all")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.coding_activity_auth);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mWebView = (WebView) findViewById(R.id.coding_web_view);
+        WebSettings settings = mWebView.getSettings();
+        settings.setJavaScriptEnabled(true);
+        settings.setUserAgentString(FAKE_USER_AGENT);
         mWebView.setBackgroundColor(Color.TRANSPARENT);
         mWebView.setWebViewClient(new WebViewClient() {
             @Override
@@ -74,6 +80,8 @@ public class AuthActivity extends BaseActivity {
                     return;
                 dismissLoading();
             }
+
+
         });
         startAuthorize();
     }
