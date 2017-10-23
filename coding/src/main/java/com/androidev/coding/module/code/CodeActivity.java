@@ -27,6 +27,7 @@ public class CodeActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.coding_activity_code);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mWebView = (WebView) findViewById(R.id.coding_web_view);
         mWebView.setBackgroundColor(Color.TRANSPARENT);
         WebSettings settings = mWebView.getSettings();

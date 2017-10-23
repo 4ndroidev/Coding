@@ -45,7 +45,6 @@ class CodePresenter {
         mPath = intent.getStringExtra(PATH);
         mSha = intent.getStringExtra(SHA);
         mType = intent.getIntExtra(TYPE, TYPE_CODE);
-        mView.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         if (TYPE_README == mType) {
             mView.setTitle(R.string.coding_readme);
             mPath = README_MD_LOWERCASE;

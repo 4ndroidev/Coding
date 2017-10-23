@@ -1,49 +1,25 @@
 package com.androidev.coding.module.auth;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
 import com.androidev.coding.R;
-import com.androidev.coding.model.Auth;
 import com.androidev.coding.module.base.BaseActivity;
-import com.androidev.coding.network.GitHub;
 
-import java.io.IOException;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.FormBody;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
-import okhttp3.ResponseBody;
-
-import static com.androidev.coding.misc.Constant.ACCESS_TOKEN_URL;
 import static com.androidev.coding.misc.Constant.APP;
-import static com.androidev.coding.misc.Constant.AUTHORIZE_URL;
-import static com.androidev.coding.misc.Constant.CLIENT_ID;
-import static com.androidev.coding.misc.Constant.CLIENT_SECRET;
 import static com.androidev.coding.misc.Constant.KEY_AUTHORIZE_CODE;
-import static com.androidev.coding.misc.Constant.KEY_CLIENT_ID;
-import static com.androidev.coding.misc.Constant.KEY_CLIENT_SECRET;
-import static com.androidev.coding.misc.Constant.KEY_TOKEN;
 import static com.androidev.coding.misc.Constant.REDIRECT_URI;
 
 public class AuthActivity extends BaseActivity {
 
-
-    private static final String FAKE_USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36";
-
     private WebView mWebView;
+    private AuthPresenter mPresenter;
 
     @Override
     @SuppressWarnings("all")
@@ -54,13 +30,13 @@ public class AuthActivity extends BaseActivity {
         mWebView = (WebView) findViewById(R.id.coding_web_view);
         WebSettings settings = mWebView.getSettings();
         settings.setJavaScriptEnabled(true);
-        settings.setUserAgentString(FAKE_USER_AGENT);
+        settings.setUserAgentString(APP);
         mWebView.setBackgroundColor(Color.TRANSPARENT);
         mWebView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 if (url.startsWith(REDIRECT_URI)) {
-                    finishAuthorize(Uri.parse(url).getQueryParameter(KEY_AUTHORIZE_CODE));
+                    mPresenter.code4token(Uri.parse(url).getQueryParameter(KEY_AUTHORIZE_CODE));
                 } else {
                     mWebView.loadUrl(url);
                 }
@@ -83,52 +59,18 @@ public class AuthActivity extends BaseActivity {
 
 
         });
-        startAuthorize();
+        mPresenter = new AuthPresenter(this);
+        mPresenter.startAuthorize();
     }
 
-    private void startAuthorize() {
-        String format = "%s?client_id=%s&redirect_uri=%s";
-        String url = String.format(format, AUTHORIZE_URL, CLIENT_ID, REDIRECT_URI);
+    void loadUrl(String url) {
         mWebView.loadUrl(url);
     }
 
-    private void finishAuthorize(String code) {
-        OkHttpClient okHttpClient = GitHub.getHttpClient();
-        RequestBody body = new FormBody.Builder()
-                .add(KEY_CLIENT_ID, CLIENT_ID)
-                .add(KEY_CLIENT_SECRET, CLIENT_SECRET)
-                .add(KEY_AUTHORIZE_CODE, code)
-                .build();
-        Request request = new Request.Builder()
-                .url(ACCESS_TOKEN_URL)
-                .post(body)
-                .header("Accept", "application/json")
-                .build();
-        okHttpClient.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                onResult(null);
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                ResponseBody responseBody = response.body();
-                if (responseBody == null) {
-                    onResult(null);
-                    return;
-                }
-                Auth auth = GitHub.getObjectMapper().readValue(responseBody.bytes(), Auth.class);
-                onResult(auth.access_token);
-            }
-        });
-    }
-
-    private void onResult(String token) {
-        getSharedPreferences(APP, Context.MODE_PRIVATE).edit().putString(KEY_TOKEN, token).apply();
-        GitHub.getInstance().authorize(token);
+    void onResult(boolean success) {
         mWebView.post(() -> {
             dismissLoading();
-            int message = TextUtils.isEmpty(token) ? R.string.coding_authorize_failure : R.string.coding_authorize_success;
+            int message = success ? R.string.coding_authorize_success : R.string.coding_authorize_failure;
             Toast.makeText(AuthActivity.this, message, Toast.LENGTH_SHORT).show();
             finish();
         });
