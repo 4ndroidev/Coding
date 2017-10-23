@@ -63,6 +63,12 @@ public class AuthActivity extends BaseActivity {
         mPresenter.startAuthorize();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mWebView.destroy();
+    }
+
     void loadUrl(String url) {
         mWebView.loadUrl(url);
     }
