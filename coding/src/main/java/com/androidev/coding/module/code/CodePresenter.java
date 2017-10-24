@@ -57,15 +57,17 @@ class CodePresenter {
         mView.startLoading();
         RestApi api = GitHub.getApi();
         Observable<ResponseBody> requestRaw;
-        if (TYPE_README == mType) {
-            requestRaw = api.tree(mOwner, mRepo, mSha).switchMap(tree -> api.raw(mOwner, mRepo, tree4readme(tree)));
-        } else if (TYPE_DIFF == mType) {
-            requestRaw = Observable.create(e -> {
-                e.onNext(ResponseBody.create(null, mView.getIntent().getStringExtra(PATCH)));
-                e.onComplete();
-            });
-        } else {
-            requestRaw = api.raw(mOwner, mRepo, mSha);
+        switch (mType) {
+            case TYPE_DIFF:
+                requestRaw = Observable.just(ResponseBody.create(null, mView.getIntent().getStringExtra(PATCH)));
+                break;
+            case TYPE_README:
+                requestRaw = api.tree(mOwner, mRepo, mSha).switchMap(tree -> api.raw(mOwner, mRepo, tree4readme(tree)));
+                break;
+            case TYPE_CODE:
+            default:
+                requestRaw = api.raw(mOwner, mRepo, mSha);
+                break;
         }
         Observable.zip(readTemplate(), requestRaw, this::applyTemplate)
                 .subscribeOn(Schedulers.io())
