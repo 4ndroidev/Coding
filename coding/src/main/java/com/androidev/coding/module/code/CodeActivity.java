@@ -56,19 +56,6 @@ public class CodeActivity extends BaseActivity {
         mWebView.destroy();
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (android.R.id.home == item.getItemId()) {
-            if (mWebView.canGoBack()) {
-                mWebView.goBack();
-            } else {
-                finish();
-            }
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
     void startLoading() {
         findViewById(R.id.coding_loading).setVisibility(View.VISIBLE);
         Animation animation = AnimationUtils.loadAnimation(this, R.anim.coding_loading_rotate_animation);

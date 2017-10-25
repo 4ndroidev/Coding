@@ -56,6 +56,7 @@ class CodePresenter {
     void load() {
         mView.startLoading();
         RestApi api = GitHub.getApi();
+        Observable<String> readTemplate = readTemplate();
         Observable<ResponseBody> requestRaw;
         switch (mType) {
             case TYPE_DIFF:
@@ -69,7 +70,7 @@ class CodePresenter {
                 requestRaw = api.raw(mOwner, mRepo, mSha);
                 break;
         }
-        Observable.zip(readTemplate(), requestRaw, this::applyTemplate)
+        Observable.zip(readTemplate, requestRaw, this::applyTemplate)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(mView::setData, mView::setError);
